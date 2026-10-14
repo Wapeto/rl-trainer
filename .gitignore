@@ -1,0 +1,34 @@
+# Raw Stats API recordings contain other players' names and IDs — anonymize before committing fixtures
+spikes/stats-api/logs/
+
+node_modules/
+target/
+dist/
+*.db
+*.db-*
+
+# Plan execution scratch (ledgers, briefs)
+.superpowers/
+
+# Tauri generated schemas
+apps/desktop/src-tauri/gen/
+
+# Phone UI build output and tooling
+ui/node_modules/
+ui/dist/
+ui/test-results/
+ui/playwright-report/
+
+# Replay fixtures hold the player's account id: kept local (tests skip without them).
+crates/rl-app/tests/fixtures/*.replay
+
+# Local agent instructions, kept out of the repo
+/AGENTS.md
+/CLAUDE.md
+
+# Design docs, plans and brand work: kept local, not published
+/docs/
+/.claude/
+
+# Never commit signing keys
+*.key

@@ -1,0 +1,83 @@
+{
+  "modes": [
+    {
+      "earlier": 3,
+      "items": [],
+      "matches": 2,
+      "team_size": 1
+    },
+    {
+      "earlier": 20,
+      "items": [
+        {
+          "better": false,
+          "covered": 1,
+          "key": "low_boost_touches",
+          "label": "Touches under 20 boost",
+          "of": 3,
+          "spread": 8.0,
+          "unit": "percent",
+          "usual": 30.0,
+          "value": 49.0
+        },
+        {
+          "better": true,
+          "covered": 1,
+          "key": "fifty_wins",
+          "label": "50/50s won",
+          "of": 3,
+          "spread": 9.0,
+          "unit": "percent",
+          "usual": 55.0,
+          "value": 71.0
+        }
+      ],
+      "matches": 3,
+      "team_size": 2
+    }
+  ],
+  "replay_added_at": 1791497040000,
+  "session_id": 12,
+  "to_save": [
+    {
+      "match_id": 21,
+      "opponent_score": 8,
+      "place": 2,
+      "ranked": true,
+      "result": "loss",
+      "session_id": 12,
+      "started_at": 1791493860000,
+      "team_score": 3,
+      "team_size": 1
+    }
+  ],
+  "training": [
+    {
+      "bars": [
+        0.9,
+        0.7,
+        0.4,
+        0.25,
+        0.1,
+        0.15,
+        0.2,
+        0.1,
+        0.3,
+        0.15,
+        0.12,
+        0.22
+      ],
+      "best_at": 1791490380000,
+      "best_makes": 8,
+      "counted": 159,
+      "dropped_at": 1791491160000,
+      "make_rate": 0.20125786163522014,
+      "makes": 32,
+      "pack_id": 11,
+      "pack_name": "Aerial Shots - Pass",
+      "quick_resets": 10,
+      "started_at": 1791489960000,
+      "target_rate": 0.65
+    }
+  ]
+}

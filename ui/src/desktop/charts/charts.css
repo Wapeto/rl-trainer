@@ -1,0 +1,53 @@
+/* Progress charts (Plan 5). */
+:root { --d-violet: #c39bff; }
+.c-chart { position: relative; width: 100%; }
+.c-chart svg { display: block; overflow: visible; }
+.c-chart--empty { display: grid; place-items: center; color: var(--d-dim); font-size: 11.5px; }
+.c-grid { stroke: rgba(255, 255, 255, 0.06); }
+.c-axis { fill: var(--d-dim); font-size: 9px; font-family: inherit; }
+.c-ref { stroke: rgba(255, 255, 255, 0.45); stroke-dasharray: 3 3; }
+.c-avg { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.c-bar { fill: rgba(255, 255, 255, 0.12); }
+.c-pt { cursor: pointer; stroke-width: 1.4; }
+.c-tip { position: absolute; transform: translate(-50%, calc(-100% - 10px)); background: #1b1d23; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 9px; padding: 6px 9px; font-size: 10.5px; white-space: nowrap; pointer-events: none; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); z-index: 5; }
+.c-tip div:first-child { font-weight: 700; font-size: 12px; }
+.c-spark { flex: none; }
+.c-card { border-radius: 14px; padding: 10px 14px 12px; min-width: 0; }
+.c-card__head { display: flex; align-items: baseline; gap: 10px; width: 100%; padding: 0 0 6px; }
+.c-card__t { font-size: 12px; font-weight: 800; }
+.c-card__v { margin-left: auto; font-size: 10.5px; font-weight: 700; color: var(--d-mut); }
+.c-card__note { margin: -4px 0 6px; font-size: 10.5px; color: var(--amber); font-weight: 700; }
+.c-weekchart { display: flex; flex-direction: column; gap: 6px; }
+.c-weeks { position: relative; display: flex; align-items: flex-end; gap: 6px; }
+.c-week--on { background: rgba(255, 255, 255, 0.08); }
+.c-weekaxis { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--d-dim); }
+.c-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 11px; color: var(--d-mut); }
+.c-legend li { display: flex; align-items: center; gap: 6px; }
+.c-legend b { color: #eef0f3; font-weight: 700; }
+.c-swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.c-tip__row { display: flex; align-items: center; gap: 6px; color: var(--d-mut); }
+.c-week { flex: 1; height: 100%; display: flex; flex-direction: column-reverse; border-radius: 3px; overflow: hidden; background: rgba(255, 255, 255, 0.03); }
+.c-week__part { display: block; width: 100%; opacity: 0.85; }
+.c-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.c-card--pick { cursor: pointer; outline: none; transition: border-color 0.15s; }
+.c-card--pick:hover, .c-card--pick:focus-visible { border-color: rgba(255, 255, 255, 0.18); }
+.c-card--on { border-color: rgba(111, 227, 169, 0.55); box-shadow: inset 0 0 0 1px rgba(111, 227, 169, 0.35); }
+.c-card--pick .c-card__t { font-size: 11px; }
+/* Inside the bars, opening toward the middle so it never leaves the card. */
+.c-tip--in { transform: translate(10px, 0); }
+.c-tip--in.c-tip--leftward { transform: translate(calc(-100% - 10px), 0); }
+
+.c-radar { margin: 0; position: relative; }
+.c-radar svg { display: block; width: 100%; max-width: 360px; margin: 0 auto; }
+.c-radar__ring { fill: none; stroke: var(--d-line); }
+.c-radar__winners { fill: rgba(255, 255, 255, 0.08); stroke: var(--d-mut); stroke-width: 1; }
+.c-radar__me { fill: rgba(122, 167, 255, 0.12); stroke: var(--d-blue); stroke-width: 2; }
+.c-radar text { fill: var(--d-mut); font-size: 10px; }
+.c-radar text.c-radar__dim { opacity: 0.45; }
+.c-radar text.c-radar__click { cursor: pointer; }
+.c-radar text.c-radar__click:hover { fill: var(--d-blue); }
+.c-radar__key { display: flex; gap: 6px; align-items: center; justify-content: center; font-size: 11px; color: var(--d-dim); }
+.c-radar__key i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; }
+.c-radar__k-me { background: var(--d-blue); }
+.c-radar__k-winners { background: var(--d-mut); margin-left: 8px; }
+.c-radar__alt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; padding: 0; }

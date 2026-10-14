@@ -1,0 +1,10 @@
+name = "rl-trainer-report-relay"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# 3 reports per minute per IP (the worker keys it on CF-Connecting-IP).
+# Needs wrangler 4.36 or later.
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 3, period = 60 }

@@ -1,0 +1,44 @@
+.hint {
+  cursor: help;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.3);
+  text-underline-offset: 3px;
+  outline: none;
+}
+.hint:focus-visible {
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(122, 167, 255, 0.5);
+}
+.hint--control {
+  display: inline-flex;
+  cursor: inherit;
+  text-decoration: none;
+}
+.hint--block {
+  display: block;
+}
+.hint-tip {
+  position: fixed;
+  z-index: 1000;
+  width: 250px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: #1d2027;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  color: #c4c8cf;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+}
+.hint-tip b {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 800;
+}

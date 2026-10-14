@@ -1,0 +1,93 @@
+{
+  "version": 1042,
+  "generation": 1,
+  "game_running": true,
+  "ingest_connected": true,
+  "stats_api": {
+    "state": "ok",
+    "rate": 10.0,
+    "port": 49123,
+    "web_port": 49124
+  },
+  "phone_clients": 1,
+  "replays": 0,
+  "live": {
+    "session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "notes": ""
+    },
+    "block": {
+      "id": 40,
+      "kind": "freeplay",
+      "playlist_id": 9,
+      "started_at": 1791503368000,
+      "paused": false,
+      "pack": null,
+      "suggested_pack": null,
+      "training": null,
+      "freeplay": {
+        "touches": 146,
+        "hard_hits": 23,
+        "max_hit_speed": 112.4,
+        "goals": 9,
+        "pct_supersonic": 18.2,
+        "pct_on_wall": 11.0,
+        "pct_airborne": 24.4,
+        "best_today_hit": 118.0
+      },
+      "match": null
+    },
+    "latest_mmr": [
+      {
+        "team_size": 1,
+        "mmr": 632,
+        "recorded_at": 1791413600000
+      },
+      {
+        "team_size": 2,
+        "mmr": 899,
+        "recorded_at": 1791413600000
+      }
+    ],
+    "last_session": {
+      "id": 11,
+      "started_at": 1791410000000,
+      "ended_at": 1791417500000,
+      "training_blocks": 3,
+      "freeplay_blocks": 2,
+      "match_blocks": 4,
+      "other_blocks": 0,
+      "wins": 3,
+      "losses": 1,
+      "ranked_team_sizes": [
+        1,
+        2
+      ],
+      "notes": "Nice warm-up 1v1 match",
+      "activities": 9,
+      "training_make_rate": 0.64,
+      "training_target_rate": 0.65,
+      "reviewed": true
+    },
+    "current_session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "ended_at": 1791503368000,
+      "training_blocks": 2,
+      "freeplay_blocks": 1,
+      "match_blocks": 1,
+      "other_blocks": 0,
+      "wins": 1,
+      "losses": 0,
+      "ranked_team_sizes": [
+        2
+      ],
+      "notes": "",
+      "activities": 4,
+      "training_make_rate": 0.58,
+      "training_target_rate": 0.65,
+      "reviewed": false
+    }
+  }
+}

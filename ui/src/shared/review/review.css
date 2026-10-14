@@ -1,0 +1,247 @@
+.rv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rv-sum {
+  margin: 0;
+  color: #c4c8cf;
+  font-size: 12.5px;
+}
+.rv-sec {
+  display: flex;
+  flex-direction: column;
+}
+.rv-sec__h {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 2px 0 4px;
+}
+.rv-k {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+.rv-n {
+  color: var(--text-3);
+  font-size: 11px;
+}
+.rv-m {
+  color: var(--text-2);
+  font-size: 11.5px;
+}
+.rv-note {
+  margin: 0;
+  padding: 4px 0;
+  color: var(--text-2);
+  font-size: 12px;
+}
+.rv-row {
+  display: grid;
+  grid-template-columns: 10px minmax(110px, 160px) 64px minmax(90px, auto) minmax(80px, 1fr) 78px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
+  font-size: 12.5px;
+}
+.rv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.rv-row__v {
+  font-size: 15px;
+  font-weight: 800;
+}
+.rv-row__u {
+  color: var(--text-2);
+  font-size: 12px;
+}
+.rv-row__d {
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+.rv-row--good .rv-dot,
+.rv-row--good .rv-trk__tick {
+  background: var(--green);
+}
+.rv-row--good .rv-row__v,
+.rv-row--good .rv-row__d {
+  color: var(--green);
+}
+.rv-row--warn .rv-dot,
+.rv-row--warn .rv-trk__tick {
+  background: var(--amber);
+}
+.rv-row--warn .rv-row__v,
+.rv-row--warn .rv-row__d {
+  color: var(--amber);
+}
+.rv-trk {
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.rv-trk i {
+  position: absolute;
+}
+.rv-trk__band {
+  top: 0;
+  bottom: 0;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.rv-trk__usual {
+  top: -2px;
+  width: 1px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.rv-trk__tick {
+  top: -4px;
+  width: 4px;
+  height: 14px;
+  margin-left: -2px;
+  border-radius: 2px;
+}
+.rv-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
+}
+.rv-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.rv-tr {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+.rv-tr__line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.rv-tr__line b {
+  flex: none;
+  font-weight: 800;
+}
+.rv-tr__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rv-tr--good .rv-tr__line b {
+  color: var(--green);
+}
+.rv-tr--warn .rv-tr__line b {
+  color: var(--amber);
+}
+.rv-bars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 22px;
+  margin-top: 6px;
+}
+.rv-bars i {
+  flex: 1;
+  border-radius: 2px;
+  opacity: 0.65;
+}
+.rv-tr--good .rv-bars i {
+  background: var(--green);
+}
+.rv-tr--warn .rv-bars i {
+  background: var(--amber);
+}
+.rv-sv {
+  display: grid;
+  grid-template-columns: 56px 36px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
+  font-size: 12.5px;
+}
+.rv-sv__r {
+  font-weight: 800;
+}
+.rv-sv__r--win {
+  color: var(--green);
+}
+.rv-sv__r--loss {
+  color: var(--red);
+}
+.rv-sv__t {
+  color: #c4c8cf;
+}
+.rv-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #7aa7ff;
+  background: rgba(122, 167, 255, 0.13);
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.rv-pill--soon {
+  color: var(--amber);
+  background: rgba(242, 180, 107, 0.13);
+}
+.rv-more {
+  align-self: flex-start;
+  padding: 6px 0 0;
+  border: 0;
+  background: none;
+  color: #7aa7ff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rv--phone .rv-row {
+  grid-template-columns: 10px 1fr auto auto;
+  grid-template-areas:
+    "dot name v d"
+    ". trk trk u";
+  row-gap: 6px;
+}
+.rv--phone .rv-dot {
+  grid-area: dot;
+}
+.rv--phone .rv-row__name {
+  grid-area: name;
+}
+.rv--phone .rv-row__v {
+  grid-area: v;
+}
+.rv--phone .rv-row__d {
+  grid-area: d;
+}
+.rv--phone .rv-trk {
+  grid-area: trk;
+}
+.rv--phone .rv-row__u {
+  grid-area: u;
+  text-align: right;
+}
+.rv--phone .rv-cols {
+  display: flex;
+  flex-direction: column;
+}

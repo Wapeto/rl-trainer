@@ -1,0 +1,85 @@
+[
+  {
+    "attempts": 276,
+    "last_trained_at": 1791489240000,
+    "make_rate": 0.6014492753623188,
+    "makes": 166,
+    "pack": {
+      "code": "C7E0-9E0B-B739-A899",
+      "creator": "",
+      "goalie": false,
+      "hidden": false,
+      "id": 11,
+      "name": "Aerial Shots - Pass",
+      "notes": "Focus on the first touch.",
+      "shot_count": 10,
+      "tags": [
+        "aerial",
+        "shooting"
+      ],
+      "target_rate": 0.65
+    }
+  },
+  {
+    "attempts": 40,
+    "last_trained_at": 1791057240000,
+    "make_rate": 0.7,
+    "makes": 28,
+    "pack": {
+      "code": "07E1-81BC-DD2E-BF8C",
+      "creator": "",
+      "goalie": false,
+      "hidden": false,
+      "id": 4,
+      "name": "Backboard Reads",
+      "notes": "",
+      "shot_count": null,
+      "tags": [
+        "defence",
+        "backboard"
+      ],
+      "target_rate": 0.65
+    }
+  },
+  {
+    "attempts": 0,
+    "last_trained_at": null,
+    "make_rate": null,
+    "makes": 0,
+    "pack": {
+      "code": "5BFE-60D6-0D59-79F2",
+      "creator": "",
+      "goalie": false,
+      "hidden": false,
+      "id": 5,
+      "name": "Aerial Off Wall",
+      "notes": "",
+      "shot_count": null,
+      "tags": [
+        "aerial",
+        "wall"
+      ],
+      "target_rate": 0.65
+    }
+  },
+  {
+    "attempts": 58,
+    "last_trained_at": 1790711640000,
+    "make_rate": 0.0,
+    "makes": 0,
+    "pack": {
+      "code": "55C9-36FE-613D-7F12",
+      "creator": "",
+      "goalie": false,
+      "hidden": true,
+      "id": 6,
+      "name": "Consistency",
+      "notes": "",
+      "shot_count": null,
+      "tags": [
+        "shooting"
+      ],
+      "target_rate": 0.65
+    }
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "dev_db_imported_at": null,
+  "firewall_port": null,
+  "hard_hit_kmh": 80.0,
+  "install_dir": null,
+  "me_hint": null,
+  "phone_enabled": true,
+  "phone_port": 49321,
+  "replay_dir": null,
+  "session_timeout_min": 30,
+  "setup_dismissed": false
+}

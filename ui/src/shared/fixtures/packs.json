@@ -1,0 +1,85 @@
+[
+  {
+    "pack": {
+      "id": 5,
+      "code": "5BFE-60D6-0D59-79F2",
+      "name": "Aerial Off Wall",
+      "creator": "",
+      "tags": [
+        "aerial",
+        "wall"
+      ],
+      "shot_count": null,
+      "target_rate": 0.65,
+      "hidden": false,
+      "notes": "",
+      "goalie": false
+    },
+    "attempts": 0,
+    "makes": 0,
+    "make_rate": null,
+    "last_trained_at": null
+  },
+  {
+    "pack": {
+      "id": 11,
+      "code": "C7E0-9E0B-B739-A899",
+      "name": "Aerial Shots - Pass",
+      "creator": "",
+      "tags": [
+        "aerial",
+        "shooting"
+      ],
+      "shot_count": null,
+      "target_rate": 0.65,
+      "hidden": false,
+      "notes": "",
+      "goalie": false
+    },
+    "attempts": 50,
+    "makes": 32,
+    "make_rate": 0.64,
+    "last_trained_at": 1791500000000
+  },
+  {
+    "pack": {
+      "id": 4,
+      "code": "07E1-81BC-DD2E-BF8C",
+      "name": "Backboard Reads",
+      "creator": "",
+      "tags": [
+        "defence",
+        "backboard"
+      ],
+      "shot_count": null,
+      "target_rate": 0.65,
+      "hidden": false,
+      "notes": "",
+      "goalie": false
+    },
+    "attempts": 0,
+    "makes": 0,
+    "make_rate": null,
+    "last_trained_at": null
+  },
+  {
+    "pack": {
+      "id": 6,
+      "code": "55C9-36FE-613D-7F12",
+      "name": "Consistency",
+      "creator": "",
+      "tags": [
+        "shooting"
+      ],
+      "shot_count": null,
+      "target_rate": 0.65,
+      "hidden": false,
+      "notes": "",
+      "goalie": false
+    },
+    "attempts": 58,
+    "makes": 0,
+    "make_rate": 0.0,
+    "last_trained_at": 1791497000000
+  }
+]

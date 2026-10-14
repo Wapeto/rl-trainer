@@ -1,0 +1,26 @@
+[
+  {
+    "kind": "pre_edit",
+    "modified_ms": 1791495480000,
+    "name": "pre-edit-20261008-215800-120-merge.db",
+    "size_bytes": 2400000
+  },
+  {
+    "kind": "daily",
+    "modified_ms": 1791446040000,
+    "name": "rl-trainer-2026-10-08.db",
+    "size_bytes": 2300000
+  },
+  {
+    "kind": "daily",
+    "modified_ms": 1791359640000,
+    "name": "rl-trainer-2026-10-07.db",
+    "size_bytes": 2300000
+  },
+  {
+    "kind": "daily",
+    "modified_ms": 1791273240000,
+    "name": "rl-trainer-2026-10-06.db",
+    "size_bytes": 2200000
+  }
+]

@@ -1,0 +1,81 @@
+{
+  "modes": [
+    {
+      "losses": 2,
+      "matches": 6,
+      "mmr_change": 35,
+      "mmr_latest": 932,
+      "mmr_spark": [
+        897,
+        904,
+        896,
+        918,
+        925,
+        932
+      ],
+      "team_size": 2,
+      "wins": 4
+    }
+  ],
+  "packs": [
+    {
+      "attempts": 240,
+      "change": 0.22499999999999998,
+      "last_played": 1791413600000,
+      "pack": {
+        "code": "5CB2-6D82-1B54-47B7",
+        "creator": "",
+        "goalie": false,
+        "hidden": false,
+        "id": 1,
+        "name": "Uncomfortable Saves",
+        "notes": "",
+        "shot_count": null,
+        "tags": [
+          "defence",
+          "saves"
+        ],
+        "target_rate": 0.65
+      },
+      "rate": 0.4875,
+      "sessions": 6,
+      "spark": [
+        0.3,
+        0.375,
+        0.45,
+        0.525,
+        0.6,
+        0.675
+      ]
+    },
+    {
+      "attempts": 36,
+      "change": null,
+      "last_played": 1791413600000,
+      "pack": {
+        "code": "9274-D4A2-967B-0D7A",
+        "creator": "jstn",
+        "goalie": false,
+        "hidden": false,
+        "id": 3,
+        "name": "Wall Clears",
+        "notes": "",
+        "shot_count": null,
+        "tags": [
+          "defence",
+          "wall"
+        ],
+        "target_rate": 0.65
+      },
+      "rate": 0.5,
+      "sessions": 3,
+      "spark": [
+        0.4166666666666667,
+        0.5,
+        0.5833333333333334
+      ]
+    }
+  ],
+  "played_ms": 14100000,
+  "sessions": 6
+}

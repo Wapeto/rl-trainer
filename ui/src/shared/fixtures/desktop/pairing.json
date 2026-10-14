@@ -1,0 +1,8 @@
+{
+  "addresses": [
+    "http://192.168.1.66:49321/"
+  ],
+  "port": 49321,
+  "qr_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"><rect width=\"10\" height=\"10\" fill=\"#fff\"/></svg>",
+  "url": "http://192.168.1.66:49321/#t=abcdef0123456789"
+}

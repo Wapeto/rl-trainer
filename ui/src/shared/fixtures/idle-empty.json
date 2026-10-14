@@ -1,0 +1,21 @@
+{
+  "version": 1042,
+  "generation": 1,
+  "game_running": false,
+  "ingest_connected": false,
+  "stats_api": {
+    "state": "ok",
+    "rate": 10.0,
+    "port": 49123,
+    "web_port": 49124
+  },
+  "phone_clients": 1,
+  "replays": 0,
+  "live": {
+    "session": null,
+    "block": null,
+    "latest_mmr": [],
+    "last_session": null,
+    "current_session": null
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "attempts": 240,
+  "best": {
+    "at": 1791413600000,
+    "attempts": 40,
+    "average": 0.6,
+    "makes": 27,
+    "ms": 1500000,
+    "rate": 0.675,
+    "session_id": 6,
+    "thin": false
+  },
+  "change": 0.22499999999999998,
+  "latest_change": 0.37500000000000006,
+  "makes": 117,
+  "ms": 9000000,
+  "pack": {
+    "code": "5CB2-6D82-1B54-47B7",
+    "creator": "",
+    "goalie": false,
+    "hidden": false,
+    "id": 1,
+    "name": "Uncomfortable Saves",
+    "notes": "",
+    "shot_count": null,
+    "tags": [
+      "defence",
+      "saves"
+    ],
+    "target_rate": 0.65
+  },
+  "points": [
+    {
+      "at": 1788389600000,
+      "attempts": 40,
+      "average": 0.3,
+      "makes": 12,
+      "ms": 1500000,
+      "rate": 0.3,
+      "session_id": 1,
+      "thin": false
+    },
+    {
+      "at": 1788994400000,
+      "attempts": 40,
+      "average": 0.3375,
+      "makes": 15,
+      "ms": 1500000,
+      "rate": 0.375,
+      "session_id": 2,
+      "thin": false
+    },
+    {
+      "at": 1789599200000,
+      "attempts": 40,
+      "average": 0.375,
+      "makes": 18,
+      "ms": 1500000,
+      "rate": 0.45,
+      "session_id": 3,
+      "thin": false
+    },
+    {
+      "at": 1790204000000,
+      "attempts": 40,
+      "average": 0.45,
+      "makes": 21,
+      "ms": 1500000,
+      "rate": 0.525,
+      "session_id": 4,
+      "thin": false
+    },
+    {
+      "at": 1790808800000,
+      "attempts": 40,
+      "average": 0.525,
+      "makes": 24,
+      "ms": 1500000,
+      "rate": 0.6,
+      "session_id": 5,
+      "thin": false
+    },
+    {
+      "at": 1791413600000,
+      "attempts": 40,
+      "average": 0.6,
+      "makes": 27,
+      "ms": 1500000,
+      "rate": 0.675,
+      "session_id": 6,
+      "thin": false
+    }
+  ],
+  "rate": 0.4875
+}

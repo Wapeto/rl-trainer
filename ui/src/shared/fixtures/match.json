@@ -1,0 +1,146 @@
+{
+  "version": 1042,
+  "generation": 1,
+  "game_running": true,
+  "ingest_connected": true,
+  "stats_api": {
+    "state": "ok",
+    "rate": 10.0,
+    "port": 49123,
+    "web_port": 49124
+  },
+  "phone_clients": 1,
+  "replays": 0,
+  "live": {
+    "session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "notes": ""
+    },
+    "block": {
+      "id": 40,
+      "kind": "match",
+      "playlist_id": 11,
+      "started_at": 1791503368000,
+      "paused": false,
+      "pack": null,
+      "suggested_pack": null,
+      "training": null,
+      "freeplay": null,
+      "match": {
+        "playlist_id": 11,
+        "ranked": true,
+        "team_size": 2,
+        "arena": "Stadium_P",
+        "team_score": 2,
+        "opponent_score": 1,
+        "clock_seconds": 167,
+        "overtime": false,
+        "goals": 1,
+        "assists": 1,
+        "saves": 3,
+        "shots": 3,
+        "score": 420,
+        "hardest_hit": 104.0,
+        "pct_supersonic": 21.0,
+        "compare": [
+          {
+            "stat": "score",
+            "mine": 420,
+            "best": 515,
+            "best_name": "Kuro",
+            "tie": false,
+            "mine_is_best": false
+          },
+          {
+            "stat": "goals",
+            "mine": 1,
+            "best": 1,
+            "best_name": null,
+            "tie": false,
+            "mine_is_best": true
+          },
+          {
+            "stat": "assists",
+            "mine": 1,
+            "best": 1,
+            "best_name": null,
+            "tie": true,
+            "mine_is_best": false
+          },
+          {
+            "stat": "saves",
+            "mine": 3,
+            "best": 5,
+            "best_name": "Vex",
+            "tie": false,
+            "mine_is_best": false
+          },
+          {
+            "stat": "shots",
+            "mine": 3,
+            "best": 4,
+            "best_name": "Kuro",
+            "tie": false,
+            "mine_is_best": false
+          }
+        ],
+        "avg_boost": 38.0,
+        "pct_zero_boost": 14.0,
+        "today_wins": 3,
+        "today_losses": 1
+      }
+    },
+    "latest_mmr": [
+      {
+        "team_size": 1,
+        "mmr": 632,
+        "recorded_at": 1791413600000
+      },
+      {
+        "team_size": 2,
+        "mmr": 899,
+        "recorded_at": 1791413600000
+      }
+    ],
+    "last_session": {
+      "id": 11,
+      "started_at": 1791410000000,
+      "ended_at": 1791417500000,
+      "training_blocks": 3,
+      "freeplay_blocks": 2,
+      "match_blocks": 4,
+      "other_blocks": 0,
+      "wins": 3,
+      "losses": 1,
+      "ranked_team_sizes": [
+        1,
+        2
+      ],
+      "notes": "Nice warm-up 1v1 match",
+      "activities": 9,
+      "training_make_rate": 0.64,
+      "training_target_rate": 0.65,
+      "reviewed": true
+    },
+    "current_session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "ended_at": 1791503368000,
+      "training_blocks": 2,
+      "freeplay_blocks": 1,
+      "match_blocks": 1,
+      "other_blocks": 0,
+      "wins": 1,
+      "losses": 0,
+      "ranked_team_sizes": [
+        2
+      ],
+      "notes": "",
+      "activities": 4,
+      "training_make_rate": 0.58,
+      "training_target_rate": 0.65,
+      "reviewed": false
+    }
+  }
+}

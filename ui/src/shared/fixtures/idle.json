@@ -1,0 +1,51 @@
+{
+  "version": 1042,
+  "generation": 1,
+  "game_running": false,
+  "ingest_connected": false,
+  "stats_api": {
+    "state": "ok",
+    "rate": 10.0,
+    "port": 49123,
+    "web_port": 49124
+  },
+  "phone_clients": 1,
+  "replays": 0,
+  "live": {
+    "session": null,
+    "block": null,
+    "latest_mmr": [
+      {
+        "team_size": 1,
+        "mmr": 632,
+        "recorded_at": 1791413600000
+      },
+      {
+        "team_size": 2,
+        "mmr": 899,
+        "recorded_at": 1791413600000
+      }
+    ],
+    "last_session": {
+      "id": 11,
+      "started_at": 1791410000000,
+      "ended_at": 1791417500000,
+      "training_blocks": 3,
+      "freeplay_blocks": 2,
+      "match_blocks": 4,
+      "other_blocks": 0,
+      "wins": 3,
+      "losses": 1,
+      "ranked_team_sizes": [
+        1,
+        2
+      ],
+      "notes": "Nice warm-up 1v1 match",
+      "activities": 9,
+      "training_make_rate": 0.64,
+      "training_target_rate": 0.65,
+      "reviewed": true
+    },
+    "current_session": null
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "best_session_rate": 0.7,
+  "history": [
+    {
+      "attempts": 62,
+      "make_rate": 0.6612903225806451,
+      "makes": 41,
+      "session_id": 12,
+      "started_at": 1791489240000
+    },
+    {
+      "attempts": 48,
+      "make_rate": 0.6041666666666666,
+      "makes": 29,
+      "session_id": 9,
+      "started_at": 1791230040000
+    },
+    {
+      "attempts": 71,
+      "make_rate": 0.5492957746478874,
+      "makes": 39,
+      "session_id": 7,
+      "started_at": 1791057240000
+    },
+    {
+      "attempts": 40,
+      "make_rate": 0.7,
+      "makes": 28,
+      "session_id": 5,
+      "started_at": 1790884440000
+    },
+    {
+      "attempts": 55,
+      "make_rate": 0.509090909090909,
+      "makes": 28,
+      "session_id": 3,
+      "started_at": 1790711640000
+    }
+  ],
+  "last_session_rate": 0.6612903225806451,
+  "stats": {
+    "attempts": 276,
+    "last_trained_at": 1791489240000,
+    "make_rate": 0.6014492753623188,
+    "makes": 166,
+    "pack": {
+      "code": "C7E0-9E0B-B739-A899",
+      "creator": "",
+      "goalie": false,
+      "hidden": false,
+      "id": 11,
+      "name": "Aerial Shots - Pass",
+      "notes": "Focus on the first touch.",
+      "shot_count": 10,
+      "tags": [
+        "aerial",
+        "shooting"
+      ],
+      "target_rate": 0.65
+    }
+  }
+}

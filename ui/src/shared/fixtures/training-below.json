@@ -1,0 +1,166 @@
+{
+  "version": 1042,
+  "generation": 1,
+  "game_running": true,
+  "ingest_connected": true,
+  "stats_api": {
+    "state": "ok",
+    "rate": 10.0,
+    "port": 49123,
+    "web_port": 49124
+  },
+  "phone_clients": 1,
+  "replays": 0,
+  "live": {
+    "session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "notes": ""
+    },
+    "block": {
+      "id": 40,
+      "kind": "training",
+      "playlist_id": 21,
+      "started_at": 1791503368000,
+      "paused": false,
+      "pack": {
+        "id": 11,
+        "code": "C7E0-9E0B-B739-A899",
+        "name": "Aerial Shots - Pass",
+        "creator": "",
+        "tags": [
+          "aerial",
+          "shooting"
+        ],
+        "shot_count": null,
+        "target_rate": 0.65,
+        "hidden": false,
+        "notes": "",
+        "goalie": false
+      },
+      "suggested_pack": null,
+      "training": {
+        "attempts": 24,
+        "makes": 14,
+        "make_rate": 0.5833333333333334,
+        "streak": 2,
+        "recent": [
+          {
+            "id": 500,
+            "seq": 15,
+            "outcome": "make",
+            "skipped": false
+          },
+          {
+            "id": 501,
+            "seq": 16,
+            "outcome": "miss",
+            "skipped": false
+          },
+          {
+            "id": 502,
+            "seq": 17,
+            "outcome": "make",
+            "skipped": false
+          },
+          {
+            "id": 503,
+            "seq": 18,
+            "outcome": "make",
+            "skipped": false
+          },
+          {
+            "id": 504,
+            "seq": 19,
+            "outcome": "miss",
+            "skipped": false
+          },
+          {
+            "id": 505,
+            "seq": 20,
+            "outcome": "miss",
+            "skipped": true
+          },
+          {
+            "id": 506,
+            "seq": 21,
+            "outcome": "make",
+            "skipped": false
+          },
+          {
+            "id": 507,
+            "seq": 22,
+            "outcome": "miss",
+            "skipped": false
+          },
+          {
+            "id": 508,
+            "seq": 23,
+            "outcome": "make",
+            "skipped": false
+          },
+          {
+            "id": 509,
+            "seq": 24,
+            "outcome": "make",
+            "skipped": false
+          }
+        ],
+        "nudge": null
+      },
+      "freeplay": null,
+      "match": null
+    },
+    "latest_mmr": [
+      {
+        "team_size": 1,
+        "mmr": 632,
+        "recorded_at": 1791413600000
+      },
+      {
+        "team_size": 2,
+        "mmr": 899,
+        "recorded_at": 1791413600000
+      }
+    ],
+    "last_session": {
+      "id": 11,
+      "started_at": 1791410000000,
+      "ended_at": 1791417500000,
+      "training_blocks": 3,
+      "freeplay_blocks": 2,
+      "match_blocks": 4,
+      "other_blocks": 0,
+      "wins": 3,
+      "losses": 1,
+      "ranked_team_sizes": [
+        1,
+        2
+      ],
+      "notes": "Nice warm-up 1v1 match",
+      "activities": 9,
+      "training_make_rate": 0.64,
+      "training_target_rate": 0.65,
+      "reviewed": true
+    },
+    "current_session": {
+      "id": 12,
+      "started_at": 1791500000000,
+      "ended_at": 1791503368000,
+      "training_blocks": 2,
+      "freeplay_blocks": 1,
+      "match_blocks": 1,
+      "other_blocks": 0,
+      "wins": 1,
+      "losses": 0,
+      "ranked_team_sizes": [
+        2
+      ],
+      "notes": "",
+      "activities": 4,
+      "training_make_rate": 0.58,
+      "training_target_rate": 0.65,
+      "reviewed": false
+    }
+  }
+}

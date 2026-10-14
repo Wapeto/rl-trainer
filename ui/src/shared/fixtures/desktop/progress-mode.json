@@ -1,0 +1,1585 @@
+{
+  "losses": 2,
+  "matches": 6,
+  "mmr": [
+    {
+      "at": 1788393200000,
+      "mmr": 897,
+      "session_id": 1
+    },
+    {
+      "at": 1788998000000,
+      "mmr": 904,
+      "session_id": 2
+    },
+    {
+      "at": 1789602800000,
+      "mmr": 896,
+      "session_id": 3
+    },
+    {
+      "at": 1790207600000,
+      "mmr": 918,
+      "session_id": 4
+    },
+    {
+      "at": 1790812400000,
+      "mmr": 925,
+      "session_id": 5
+    },
+    {
+      "at": 1791417200000,
+      "mmr": 932,
+      "session_id": 6
+    }
+  ],
+  "mmr_change": 35,
+  "mmr_first": 897,
+  "mmr_high": 932,
+  "mmr_latest": 932,
+  "overtimes": 0,
+  "sessions": 6,
+  "stats": [
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 66.66666666666667,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 100.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 100.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 100.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 100.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "win_rate"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 1.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 2.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 2.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "goals"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 0.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "assists"
+    },
+    {
+      "change": -0.3333333333333335,
+      "matches": 6,
+      "overall": 1.5,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 2.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 2.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 2.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 1.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "saves"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 3.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 3.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 3.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 3.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 3.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 3.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 3.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "shots"
+    },
+    {
+      "change": 60.0,
+      "matches": 6,
+      "overall": 220.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 170.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 190.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 210.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 230.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 250.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 270.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "score"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 33.333333333333336,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 33.333333333333336,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 66.66666666666667,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 33.333333333333336,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 66.66666666666667,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "shooting_pct"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 94.66666666666667,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 94.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 95.0,
+          "wins": 1
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "goal_speed"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 0.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "epic_saves"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 22.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 22.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 22.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 22.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 22.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 22.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 22.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "touches"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 3.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 2.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 3.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 4.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "aerial_touches"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 60.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 59.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 60.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 61.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "hit_power"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 4.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 4.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 4.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 4.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "hard_hits"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 42.857142857142854,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 42.857142857142854,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 42.857142857142854,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 42.857142857142854,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "defensive_third"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 21.428571428571427,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 21.428571428571427,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 21.428571428571427,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 21.428571428571427,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "attacking_third"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 17.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 18.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 17.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 16.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "airborne"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 8.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 8.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 8.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 8.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "on_wall"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 65.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 64.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 65.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 66.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "avg_speed"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 12.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 12.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 12.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 12.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 12.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 12.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 12.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "supersonic"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 34.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 34.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 34.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 34.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 34.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 34.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 34.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "avg_boost"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 14.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 14.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 14.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 14.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 14.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 14.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 14.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "zero_boost"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 9.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 9.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 9.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 9.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "full_boost"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 18.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 18.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 18.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 18.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "boosting"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 700.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 680.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 700.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 720.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "boost_per_minute"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 8.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 8.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 8.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 8.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "big_pads"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 0.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 0.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "demos_given"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 1.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 1.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 1.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "demos_taken"
+    },
+    {
+      "change": 6.797385620915037,
+      "matches": 6,
+      "overall": 45.833333333333336,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 39.53488372093023,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 42.22222222222222,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 44.680851063829785,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 46.93877551020408,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 49.01960784313726,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 50.943396226415096,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "share_score"
+    },
+    {
+      "change": 0.0,
+      "matches": 6,
+      "overall": 50.0,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 50.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 66.66666666666667,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 0.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 50.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 66.66666666666667,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 0.0,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "share_goals"
+    },
+    {
+      "change": -5.454545454545453,
+      "matches": 6,
+      "overall": 42.857142857142854,
+      "points": [
+        {
+          "at": 1788389600000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 1,
+          "value": 50.0,
+          "wins": 1
+        },
+        {
+          "at": 1788994400000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 2,
+          "value": 33.333333333333336,
+          "wins": 1
+        },
+        {
+          "at": 1789599200000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 3,
+          "value": 50.0,
+          "wins": 0
+        },
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 33.333333333333336,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 50.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 33.333333333333336,
+          "wins": 0
+        }
+      ],
+      "since": null,
+      "stat": "share_saves"
+    },
+    {
+      "change": null,
+      "matches": 3,
+      "overall": 53.0,
+      "points": [
+        {
+          "at": 1790204000000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 4,
+          "value": 52.0,
+          "wins": 1
+        },
+        {
+          "at": 1790808800000,
+          "losses": 0,
+          "matches": 1,
+          "partial": false,
+          "session_id": 5,
+          "value": 53.0,
+          "wins": 1
+        },
+        {
+          "at": 1791413600000,
+          "losses": 1,
+          "matches": 1,
+          "partial": false,
+          "session_id": 6,
+          "value": 54.0,
+          "wins": 0
+        }
+      ],
+      "since": 1790205800000,
+      "stat": "possession"
+    }
+  ],
+  "team_size": 2,
+  "wins": 4
+}

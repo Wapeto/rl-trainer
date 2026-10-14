@@ -1,0 +1,38 @@
+[package]
+name = "rl-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+ts-rs.workspace = true
+axum.workspace = true
+base64.workspace = true
+boxcars.workspace = true
+chrono.workspace = true
+flate2.workspace = true
+futures-util.workspace = true
+getrandom.workspace = true
+local-ip-address.workspace = true
+qrcode.workspace = true
+reqwest.workspace = true
+rl-core = { path = "../rl-core" }
+rusqlite.workspace = true
+rust-embed.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+subtle.workspace = true
+subtr-actor.workspace = true
+sysinfo.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows.workspace = true
+winreg.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+tokio-tungstenite.workspace = true
+tower.workspace = true

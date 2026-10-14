@@ -7,7 +7,8 @@ Free Cloudflare and Discord accounts are enough.
 ## Set up
 
 1. Make a free account at <https://dash.cloudflare.com/sign-up>.
-2. In Discord, open the channel for reports: Edit Channel, Integrations, Webhooks, New Webhook,
+2. In Discord, make a **Forum** channel for reports (each report becomes a post), then Edit
+   Channel, Integrations, Webhooks, New Webhook,
    Copy Webhook URL.
 3. From this folder:
 

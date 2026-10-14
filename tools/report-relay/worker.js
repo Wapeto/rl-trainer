@@ -48,7 +48,17 @@ export async function validateReport(form, headers) {
   return { ok: true, report: { kind, text, contact, version, windows, screenshot, log } };
 }
 
-/** The Discord webhook body: an embed, plus the files. */
+const THREAD_NAME_MAX = 100; // Discord's limit for a forum post title
+
+/** The forum post title: kind and the start of the text's first line. */
+export function threadName(report) {
+  const head = `${report.kind === "bug" ? "Bug" : "Idea"}: `;
+  const line = report.text.split("\n")[0].trim();
+  const room = THREAD_NAME_MAX - head.length;
+  return head + (line.length > room ? `${line.slice(0, room - 1)}…` : line);
+}
+
+/** The Discord webhook body for a forum channel: a new post with an embed, plus the files. */
 export function discordForm(report) {
   const embed = {
     title: report.kind === "bug" ? "Bug report" : "Idea",
@@ -61,7 +71,7 @@ export function discordForm(report) {
     ],
   };
   const out = new FormData();
-  out.set("payload_json", JSON.stringify({ embeds: [embed] }));
+  out.set("payload_json", JSON.stringify({ thread_name: threadName(report), embeds: [embed] }));
   [report.screenshot, report.log].filter(Boolean).forEach((file, n) => {
     out.set(`files[${n}]`, file.blob, file.name);
   });

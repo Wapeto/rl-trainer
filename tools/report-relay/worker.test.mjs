@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import worker, { discordForm, validateReport } from "./worker.js";
+import worker, { discordForm, threadName, validateReport } from "./worker.js";
 
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0, 0]);
 const headers = (version = "0.2.0") => new Headers(version ? { "X-RL-Trainer-Version": version } : {});
@@ -26,6 +26,14 @@ test("a good report passes with its screenshot and log", async () => {
   const out = discordForm(result.report);
   assert.ok(out.get("files[0]") && out.get("files[1]"));
   assert.equal(JSON.parse(out.get("payload_json")).embeds[0].title, "Bug report");
+});
+
+test("each report opens a forum post titled by kind and first line, at most 100 chars", () => {
+  const name = (kind, text) => threadName({ kind, text });
+  assert.equal(name("idea", "Dark mode\nplease"), "Idea: Dark mode");
+  const long = name("bug", "x".repeat(300));
+  assert.equal(long.length, 100);
+  assert.ok(long.startsWith("Bug: x") && long.endsWith("…"));
 });
 
 test("a bad kind is refused", async () => {

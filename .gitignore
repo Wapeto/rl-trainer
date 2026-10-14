@@ -32,3 +32,6 @@ crates/rl-app/tests/fixtures/*.replay
 
 # Never commit signing keys
 *.key
+
+# Wrangler local cache
+.wrangler/

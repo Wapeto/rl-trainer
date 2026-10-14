@@ -54,6 +54,13 @@ describe("GetStarted", () => {
     expect(open).toHaveBeenCalled();
   });
 
+  it("stays hidden while a fixed game is still starting", async () => {
+    const api = fakeDesktopApi();
+    renderCard(api, { ...fixtures.trainingBelow, game_running: true, ingest_connected: false } as AppSnapshot);
+    await vi.waitFor(() => expect(api.profiles).toHaveBeenCalled());
+    expect(screen.queryByRole("region", { name: "Get started" })).toBeNull();
+  });
+
   it("stays hidden once dismissed", async () => {
     const api = fakeDesktopApi({ settings: vi.fn().mockResolvedValue({ ...f.settings, setup_dismissed: true }) });
     renderCard(api, off);

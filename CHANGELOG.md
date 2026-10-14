@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- After **Fix…** for the Stats API, the app now says to restart Rocket League: the game only
+  reads that setting when it starts. While the game runs without sending data, Settings says so.
+- Settings → Phone explains that Windows must treat your Wi-Fi as Private for the phone to connect.
+
 ## 0.2.0 — first release for testers
 
 - Records free play, training packs and ranked/casual matches from the Stats API, and imports

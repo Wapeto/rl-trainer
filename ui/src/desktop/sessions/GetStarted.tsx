@@ -3,7 +3,7 @@ import { CircleCheck, CircleDashed } from "lucide-react";
 import { act } from "../act";
 import { useLoad } from "../components/useLoad";
 import type { PageProps } from "../pageProps";
-import { accountText, statsText } from "../settings/sections";
+import { FIXED_TEXT, accountText, statsText } from "../settings/sections";
 
 interface StepProps {
   done: boolean;
@@ -34,9 +34,11 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
   const profiles = useLoad(() => api.profiles(), key).data;
   if (!snapshot || !settings || !profiles || settings.setup_dismissed) return null;
 
-  const stats = statsText(snapshot.stats_api);
+  // Visibility follows the file, so the card doesn't pop up while a game is still starting.
+  const fileOk = statsText(snapshot.stats_api).ok;
+  const stats = statsText(snapshot.stats_api, snapshot);
   const account = profiles.some((p) => p.is_active);
-  if (stats.ok && account) return null;
+  if (fileOk && account) return null;
   const phone = snapshot.phone_clients > 0;
 
   async function run(action: () => Promise<unknown>, okText: string) {
@@ -50,8 +52,8 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
       Open Settings
     </button>
   );
-  const statsAction = stats.fix ? (
-    <button type="button" className="d-btn d-btn--warn" onClick={() => run(() => api.fixStatsApi(), "Stats API turned on")}>
+  const statsAction = fileOk ? null : stats.fix ? (
+    <button type="button" className="d-btn d-btn--warn" onClick={() => run(() => api.fixStatsApi(), FIXED_TEXT)}>
       Fix…
     </button>
   ) : (
@@ -81,7 +83,11 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
         <Step
           done={phone}
           title="Phone (optional)"
-          text={settings.phone_enabled ? "Scan the QR code in Settings with your phone." : "Log reps and see your stats on your phone over Wi-Fi."}
+          text={
+            settings.phone_enabled
+              ? "Scan the QR code in Settings with your phone. If it can't connect, set this Wi-Fi to Private in Windows."
+              : "Log reps and see your stats on your phone over Wi-Fi."
+          }
           action={
             settings.phone_enabled ? (
               openSettings

@@ -10,8 +10,9 @@ import { SettingsPage } from "./SettingsPage";
 import { backupLabel, maskToken } from "./sections";
 
 function renderPage(api: DesktopApi = fakeDesktopApi(), snapshot: AppSnapshot = fixtures.trainingBelow) {
-  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={vi.fn()} reload="r" onChanged={vi.fn()} />);
-  return { api };
+  const notify = vi.fn();
+  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={notify} reload="r" onChanged={vi.fn()} />);
+  return { api, notify };
 }
 
 describe("SettingsPage", () => {
@@ -57,10 +58,18 @@ describe("SettingsPage", () => {
 
   it("offers a fix when the Stats API is off", async () => {
     const snapshot = { ...fixtures.trainingBelow, stats_api: { state: "disabled", ini: "C:/x.ini" } } as AppSnapshot;
-    const { api } = renderPage(fakeDesktopApi(), snapshot);
+    const { api, notify } = renderPage(fakeDesktopApi(), snapshot);
     expect(await screen.findByText("Turned off in the game's settings file")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Fix…" }));
     expect(api.fixStatsApi).toHaveBeenCalled();
+    expect(notify).toHaveBeenCalledWith("Stats API turned on. Restart Rocket League if it's open.", "ok");
+  });
+
+  it("asks for a game restart when the file is fixed but no data comes in", async () => {
+    const snapshot = { ...fixtures.trainingBelow, game_running: true, ingest_connected: false } as AppSnapshot;
+    renderPage(fakeDesktopApi(), snapshot);
+    expect(await screen.findByText(/If this stays, restart Rocket League/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Check again" })).toBeNull();
   });
 
   it("sets the Rocket League folder", async () => {

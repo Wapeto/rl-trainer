@@ -4,6 +4,7 @@ import type { Notify } from "@shared/components/Toast";
 import { dayLabel, timeOfDay } from "@shared/format";
 import type {
   About,
+  AppSnapshot,
   BackupInfo,
   PairingInfo,
   ProfileRow,
@@ -28,9 +29,16 @@ export const maskToken = (url: string) => url.replace(/#t=.*/, "#t=••••�
 const whole = (raw: string) => (/^\d+$/.test(raw) ? Number(raw) : null);
 const number = (raw: string) => (raw !== "" && Number.isFinite(Number(raw)) ? Number(raw) : null);
 
-export function statsText(s: StatsApiStatus | undefined): { ok: boolean; text: string; fix: boolean } {
+/** The game reads its settings file only at launch, so a fixed file isn't enough while it runs. */
+export const FIXED_TEXT = "Stats API turned on. Restart Rocket League if it's open.";
+const WAITING = "Waiting for data. If this stays, restart Rocket League.";
+
+type Live = Pick<AppSnapshot, "game_running" | "ingest_connected">;
+
+export function statsText(s: StatsApiStatus | undefined, live?: Live): { ok: boolean; text: string; fix: boolean } {
   switch (s?.state) {
     case "ok":
+      if (live?.game_running && !live.ingest_connected) return { ok: false, text: WAITING, fix: false };
       return { ok: true, text: "Working", fix: false };
     case "disabled":
       return { ok: false, text: "Turned off in the game's settings file", fix: true };
@@ -90,7 +98,10 @@ export function PhoneSection({ api, notify, settings, pairing, phones, refresh, 
     <section className="d-sec" aria-label="Phone">
       <span className="d-k">Phone</span>
       <div className="d-card glass">
-        <Row title="Phone page" hint="Lets your phone open the tracker on this Wi-Fi.">
+        <Row
+          title="Phone page"
+          hint="Lets your phone open the tracker on this Wi-Fi. Windows must treat this Wi-Fi as Private: Settings → Network & internet → your network → Private."
+        >
           <Switch label="Phone page" on={settings.phone_enabled} onChange={toggle} />
         </Row>
         {settings.phone_enabled && pairing && (
@@ -141,11 +152,13 @@ interface GameProps {
   notify: Notify;
   settings: Settings;
   status: StatsApiStatus | undefined;
+  live?: Live;
   save: SaveSetting;
 }
 
-export function GameSection({ api, notify, settings, status, save }: GameProps) {
-  const s = statsText(status);
+export function GameSection({ api, notify, settings, status, live, save }: GameProps) {
+  const s = statsText(status, live);
+  const waiting = status?.state === "ok" && !s.ok;
   return (
     <section className="d-sec" aria-label="Game">
       <span className="d-k">Game</span>
@@ -153,11 +166,11 @@ export function GameSection({ api, notify, settings, status, save }: GameProps) 
         <Row title="Stats API" hint="Rocket League sends live data to the app.">
           <span className={s.ok ? "d-ok" : "d-warn"}>{s.text}</span>
           {s.fix && (
-            <button type="button" className="d-btn d-btn--warn" onClick={() => act(notify, () => api.fixStatsApi(), "Stats API turned on")}>
+            <button type="button" className="d-btn d-btn--warn" onClick={() => act(notify, () => api.fixStatsApi(), FIXED_TEXT)}>
               Fix…
             </button>
           )}
-          {!s.ok && !s.fix && (
+          {!s.ok && !s.fix && !waiting && (
             <button type="button" className="d-btn" onClick={() => act(notify, () => api.recheckStatsApi())}>
               Check again
             </button>

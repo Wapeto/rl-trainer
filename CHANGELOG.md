@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0
+
+- **Where you stand, not just a rank.** The radars on the match page and on Progress now show
+  each habit between how the losers play (dashed red ring) and how the winners play (green ring)
+  in your last 20 ranked games, in real values. Only habits that clearly separate winners from
+  losers get a spoke; score, goals, assists, saves and shots are left out, since they are
+  results.
+- Point at a stat (or click the chart and use ← →) to see your value, the winners' and the
+  losers', how far along you are, and how much that stat matters for winning. Brighter names
+  and more bars mean it matters more. The header names the two habits to work on first.
+- On Progress, your value is your average over those games.
+- **Settings in tabs:** Game, Phone, Replays, Account & tracking, App and About, one topic at a
+  time. A topic that needs you (the Stats API off, no account) gets an amber dot and opens first.
+
 ## 0.2.2
 
 - **Replays are the source of truth.** When a replay is imported, its final score replaces what

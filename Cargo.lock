@@ -3816,7 +3816,7 @@ dependencies = [
 
 [[package]]
 name = "rl-app"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "axum",
  "base64 0.23.1",
@@ -3849,7 +3849,7 @@ dependencies = [
 
 [[package]]
 name = "rl-cli"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -3861,7 +3861,7 @@ dependencies = [
 
 [[package]]
 name = "rl-core"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "flate2",
  "rusqlite",
@@ -3874,7 +3874,7 @@ dependencies = [
 
 [[package]]
 name = "rl-trainer"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "rl-app",
  "serde",

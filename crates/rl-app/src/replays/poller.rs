@@ -113,6 +113,7 @@ impl App {
                 if let Err(err) = app.poll_replays(&mut state).await {
                     tracing::warn!(error = %err, "replay folder check failed");
                 }
+                app.run_first_backfill().await;
             }
         });
         crate::app::push_background(self, task);

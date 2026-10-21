@@ -24,6 +24,10 @@ fn due(last_ping_at: Option<i64>, now: i64) -> bool {
 
 impl App {
     pub(crate) fn spawn_usage_ping(&self) {
+        // Release builds only: a dev build must not count as an install.
+        if cfg!(debug_assertions) {
+            return;
+        }
         let app = self.clone();
         let task = tokio::spawn(async move {
             if let Err(err) = app.send_usage_ping().await {

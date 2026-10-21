@@ -176,3 +176,66 @@ async fn the_first_start_imports_once() {
     assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 0);
     app.shutdown().await;
 }
+
+#[tokio::test]
+async fn the_first_import_waits_for_the_profile() {
+    let Some(bytes) = fixture() else { return };
+    let mut s = setup(&bytes, false);
+    s.config.replay_poll_every = Duration::from_millis(200);
+    let db = db_of(&s);
+    let conn = rl_core::store::open_db(&db).unwrap();
+    let me: String = conn
+        .query_row("SELECT primary_id FROM profile", [], |r| r.get(0))
+        .unwrap();
+    conn.execute("DELETE FROM profile", []).unwrap();
+    let app = App::start(s.config.clone(), FakePlatform::new())
+        .await
+        .unwrap();
+    tokio::time::sleep(Duration::from_millis(600)).await;
+    assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 0);
+    // The first live match makes the profile; the import runs then, once.
+    conn.execute(
+        "INSERT INTO profile (primary_id, display_name, created_at, is_active)
+         VALUES (?1, 'me', 0, 1)",
+        [&me],
+    )
+    .unwrap();
+    for _ in 0..100 {
+        if count(&db, "SELECT COUNT(*) FROM match_record") == 1 {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 1);
+    app.shutdown().await;
+}
+
+#[tokio::test]
+async fn a_deleted_match_stays_gone_when_its_replay_is_imported() {
+    let Some(bytes) = fixture() else { return };
+    let s = setup(&bytes, true);
+    let db = db_of(&s);
+    let conn = rl_core::store::open_db(&db).unwrap();
+    // A match recorded live, deleted before its replay was ever read.
+    conn.execute_batch(&format!(
+        "INSERT INTO session (id, started_at, ended_at) VALUES (1, 0, 600000);
+         INSERT INTO block (id, session_id, kind, started_at, ended_at) VALUES (1, 1, 'match', 0, 300000);
+         INSERT INTO match_record (id, block_id, match_guid, playlist_id, ranked, team_size, arena,
+             result, team_score, opponent_score, overtime, score, goals, assists, saves, shots,
+             touches, demos, epic_saves, avg_boost, pct_zero_boost, pct_supersonic,
+             metrics_partial, scoreboard_json)
+         VALUES (1, 1, '{}', 11, 1, 2, 'Park_P', 'win', 3, 1, 0, 300, 1, 0, 1, 3, 30, 0, 0,
+             40, 15, 10, 0, '[]');",
+        s.guid
+    ))
+    .unwrap();
+    rl_core::store::session_edits::delete_session(&conn, 1).unwrap();
+    drop(conn);
+    let app = App::start(s.config.clone(), FakePlatform::new())
+        .await
+        .unwrap();
+    assert_eq!(app.import_past_games(20).await.unwrap(), 0);
+    assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 0);
+    assert_eq!(count(&db, "SELECT COUNT(*) FROM session"), 0);
+    app.shutdown().await;
+}

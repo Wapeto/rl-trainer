@@ -195,13 +195,16 @@ mod windows_impl {
         }
 
         fn firewall_rule_allows(&self, program: &Path) -> bool {
+            // The rule is written with the resolved path (`firewall_target`); compare the same.
+            let program =
+                crate::elevated::firewall_target(program).unwrap_or(program.to_path_buf());
             std::process::Command::new("netsh")
                 .args(netsh_show_args())
                 .creation_flags(CREATE_NO_WINDOW)
                 .output()
                 .is_ok_and(|out| {
                     out.status.success()
-                        && rule_allows_program(&String::from_utf8_lossy(&out.stdout), program)
+                        && rule_allows_program(&String::from_utf8_lossy(&out.stdout), &program)
                 })
         }
 

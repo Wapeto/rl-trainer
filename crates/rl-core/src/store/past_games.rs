@@ -53,6 +53,28 @@ pub fn settled_files(conn: &Connection) -> rusqlite::Result<HashSet<String>> {
     rows.collect()
 }
 
+fn is_deleted(conn: &Connection, guid: &str) -> rusqlite::Result<bool> {
+    conn.query_row(
+        "SELECT EXISTS (SELECT 1 FROM deleted_match WHERE match_guid = ?1)",
+        params![guid],
+        |r| r.get(0),
+    )
+}
+
+/// Whether the replay of this game needs no more reading: the user deleted the match, or its
+/// replay stats are already saved. (A live match without stats is the folder poller's job.)
+pub fn game_settled(conn: &Connection, guid: &str) -> rusqlite::Result<bool> {
+    if is_deleted(conn, guid)? {
+        return Ok(true);
+    }
+    conn.query_row(
+        "SELECT EXISTS (SELECT 1 FROM match_record m JOIN replay_stats r ON r.match_id = m.id
+                        WHERE m.match_guid = ?1)",
+        params![guid],
+        |r| r.get(0),
+    )
+}
+
 /// One game read from a replay, to be added to the log.
 #[derive(Debug, Clone, PartialEq)]
 pub struct PastGame {
@@ -72,7 +94,8 @@ pub struct PastGame {
 
 /// Adds the game as a match block in the replay session of its local day (`day_start_ms` up to
 /// `day_end_ms`), making that session when the day has none. Returns the new match id, or `None`
-/// when a match with this GUID is already in the log. Call it inside a transaction.
+/// when a match with this GUID is already in the log or was deleted from it. Call it inside a
+/// transaction.
 pub fn insert_past_game(
     conn: &Connection,
     game: &PastGame,
@@ -80,6 +103,9 @@ pub fn insert_past_game(
     day_end_ms: i64,
 ) -> rusqlite::Result<Option<i64>> {
     if super::replays::match_id_by_guid(conn, &game.match_guid)?.is_some() {
+        return Ok(None);
+    }
+    if is_deleted(conn, &game.match_guid)? {
         return Ok(None);
     }
     let existing: Option<i64> = conn

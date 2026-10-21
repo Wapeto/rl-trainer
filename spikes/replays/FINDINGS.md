@@ -95,4 +95,4 @@ Checked on 2026-10-21 against the newest replays in the local Demos folder (noth
 - `PlayerStats[]`: `Name`, `Platform`, `Team`, `Score`, `Goals`, `Assists`, `Saves`, `Shots`, `bBot`. `OnlineID` can be `"0"` for Epic players, so match "me" through the stats pass (`remote_id`), not the header.
 - `TotalSecondsPlayed` (regulation is about 300 s), `Date` (`YYYY-MM-DD HH-MM-SS`, UTC), `TeamSize`, `MatchType` (`Online`, `Private`, `FTE`, ...).
 - **No** overtime flag, forfeit flag, playlist id or ranked flag. `MatchType = Online` covers casual and ranked alike.
-- Consequences: an imported game gets `overtime = false`, `ranked = false` (spec §2.2 fallback), the playlist is guessed from `TeamSize` only when unambiguous, and only `Online` replays are imported. A live record keeps its own overtime flag when a replay overrides the score.
+- Consequences: an imported game gets `overtime = false`, `ranked = false` (spec §2.2 fallback), and only `Online` replays are imported. A live record keeps its own overtime flag when a replay overrides the score.

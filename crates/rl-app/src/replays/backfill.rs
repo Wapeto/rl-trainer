@@ -22,6 +22,8 @@ const REGULATION_SECONDS: f64 = 300.0;
 enum Read {
     /// Already in the log, or not a replay: the folder poller handles it.
     Skip,
+    /// Its game is already in the log (recorded live or by another import).
+    Known(String),
     NotMine(String),
     Failed(Option<String>, String),
     Game(String, Box<Extracted>),
@@ -57,13 +59,13 @@ impl App {
         Ok(added)
     }
 
-    /// On the first start with a known player and an empty log, once (`backfill_done`).
+    /// Once (`backfill_done`), as soon as the player is known. The profile only appears with the
+    /// first live match, so the folder poller asks again on every tick. Games already in the
+    /// log or deleted from it are skipped by GUID.
     pub(crate) async fn first_start_backfill(&self) -> Result<usize, AppError> {
         let due = {
             let conn = self.read_db()?;
-            !settings::backfill_done(&conn)?
-                && replays::earliest_match_at(&conn)?.is_none()
-                && profile_primary_id(&conn)?.is_some()
+            !settings::backfill_done(&conn)? && profile_primary_id(&conn)?.is_some()
         };
         if !due {
             return Ok(0);
@@ -72,22 +74,24 @@ impl App {
         self.import_past_games(PAST_GAMES_LIMIT).await
     }
 
-    pub(crate) fn spawn_first_backfill(&self) {
-        let app = self.clone();
-        let task = tokio::spawn(async move {
-            match app.first_start_backfill().await {
-                Ok(0) => {}
-                Ok(n) => tracing::info!(games = n, "past games imported at the first start"),
-                Err(err) => tracing::error!(error = %err, "first-start import failed"),
-            }
-        });
-        crate::app::push_background(self, task);
+    /// Runs the import when it is due, logging the outcome.
+    pub(crate) async fn run_first_backfill(&self) {
+        match self.first_start_backfill().await {
+            Ok(0) => {}
+            Ok(n) => tracing::info!(games = n, "past games imported at the first start"),
+            Err(err) => tracing::error!(error = %err, "first-start import failed"),
+        }
     }
 
     async fn import_past_game(&self, file: FileInfo, me: &PlayerKey) -> Result<bool, AppError> {
         let read = self.read_past_game(&file, me).await?;
         let (guid, found) = match read {
             Read::Skip => return Ok(false),
+            Read::Known(g) => {
+                return self
+                    .record_only(file, Some(g), ReplayFileStatus::Imported, None)
+                    .await
+            }
             Read::NotMine(g) => {
                 return self
                     .record_only(file, Some(g), ReplayFileStatus::NotMine, None)
@@ -107,7 +111,7 @@ impl App {
                 .await;
         };
         let (day_start, day_end) = local_day(game.started_at);
-        let rec = file_record(&file, Some(guid), ReplayFileStatus::Imported, None);
+        let rec = file_record(&file, Some(guid.clone()), ReplayFileStatus::Imported, None);
         let engine = self.engine().await?;
         let added = engine
             .run(move |pipeline| {
@@ -128,6 +132,11 @@ impl App {
             .await?;
         if added {
             engine.replays_imported().await?;
+        } else {
+            // Another import took the GUID first, or the user deleted the match.
+            return self
+                .record_only(file, Some(guid), ReplayFileStatus::Imported, None)
+                .await;
         }
         Ok(added)
     }
@@ -146,7 +155,17 @@ impl App {
             Ok((_, None)) => return Ok(Read::Skip),
             Ok((bytes, Some(guid))) => (bytes, guid),
         };
-        if replays::match_id_by_guid(&*self.read_db()?, &guid)?.is_some() {
+        let (settled, in_log) = {
+            let conn = self.read_db()?;
+            (
+                past_games::game_settled(&conn, &guid)?,
+                replays::match_id_by_guid(&conn, &guid)?.is_some(),
+            )
+        };
+        if settled {
+            return Ok(Read::Known(guid));
+        }
+        if in_log {
             return Ok(Read::Skip);
         }
         let me = me.clone();
@@ -156,6 +175,7 @@ impl App {
         .await
         .map_err(|e| AppError::Join(e.to_string()))?;
         Ok(match parsed {
+            Ok(Ok(Some(found))) if !is_online(&found.game) => Read::NotMine(guid),
             Ok(Ok(Some(found))) => Read::Game(guid, Box::new(found)),
             Ok(Ok(None)) => Read::NotMine(guid),
             Ok(Err(err)) => Read::Failed(Some(guid), err.to_string()),
@@ -198,6 +218,11 @@ fn file_record(
         status,
         error,
     }
+}
+
+/// Private matches, exhibitions and the like are not part of the match history.
+fn is_online(game: &extract::GameHeader) -> bool {
+    game.match_type.as_deref() == Some("Online")
 }
 
 /// The header `Date` is when the replay was saved: the end of the game.
@@ -263,6 +288,17 @@ fn local_day(ms: i64) -> (i64, i64) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn only_online_games_are_past_games() {
+        let header = |t: Option<&str>| extract::GameHeader {
+            match_type: t.map(str::to_owned),
+            ..Default::default()
+        };
+        assert!(is_online(&header(Some("Online"))));
+        assert!(!is_online(&header(Some("Private"))));
+        assert!(!is_online(&header(None)));
+    }
 
     #[test]
     fn a_local_day_holds_its_moment() {

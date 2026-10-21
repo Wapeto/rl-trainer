@@ -298,7 +298,6 @@ impl App {
         app.spawn_replay_poller(config.replay_poll_every);
         // The game may already be set up: show the Stats API state before it starts.
         app.recheck_stats_api().await;
-        app.spawn_first_backfill();
         app.spawn_usage_ping();
         Ok(app)
     }

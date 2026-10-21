@@ -114,6 +114,8 @@ pub struct GameHeader {
     pub seconds_played: Option<f64>,
     pub team_size: Option<i64>,
     pub arena: Option<String>,
+    /// `Online`, `Private`, `FTE`, ...: only online games are imported as past games.
+    pub match_type: Option<String>,
 }
 
 fn prop<'a>(replay: &'a boxcars::Replay, key: &str) -> Option<&'a boxcars::HeaderProp> {
@@ -137,6 +139,9 @@ fn game_header(replay: &boxcars::Replay) -> GameHeader {
             .and_then(|p| p.as_i32())
             .map(i64::from),
         arena: prop(replay, "MapName")
+            .and_then(|p| p.as_string())
+            .map(str::to_owned),
+        match_type: prop(replay, "MatchType")
             .and_then(|p| p.as_string())
             .map(str::to_owned),
     }

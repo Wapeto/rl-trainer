@@ -96,3 +96,6 @@ Checked on 2026-10-21 against the newest replays in the local Demos folder (noth
 - `TotalSecondsPlayed` (regulation is about 300 s), `Date` (`YYYY-MM-DD HH-MM-SS`, UTC), `TeamSize`, `MatchType` (`Online`, `Private`, `FTE`, ...).
 - **No** overtime flag, forfeit flag, playlist id or ranked flag. `MatchType = Online` covers casual and ranked alike.
 - Consequences: an imported game gets `overtime = false`, `ranked = false` (spec §2.2 fallback), and only `Online` replays are imported. A live record keeps its own overtime flag when a replay overrides the score.
+- Checked 2026-10-21 on a folder of 2568 replays (Oct 2023 – Oct 2026): only the 63 newest carry
+  `MatchGUID`. Every replay has `Id`, equal to its file name. "Import past games" keys a game by
+  `MatchGUID`, else by `replay:<Id>` (never equal to a live GUID, so no clash with recorded matches).

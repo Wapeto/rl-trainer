@@ -62,7 +62,7 @@ impl App {
         .await
         .map_err(|e| AppError::Join(e.to_string()))?;
         Ok(match parsed {
-            Ok(Ok(Some(Box::new(found)))) => Outcome::Stats(guid, match_id, found),
+            Ok(Ok(Some(found))) => Outcome::Stats(guid, match_id, Box::new(found)),
             Ok(Ok(None)) => Outcome::NotMine(guid),
             Ok(Err(err)) => Outcome::Failed(Some(guid), err.to_string()),
             Err(_) => Outcome::Failed(Some(guid), "the replay parser crashed on this file".into()),

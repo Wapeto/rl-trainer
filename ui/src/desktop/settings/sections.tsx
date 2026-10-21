@@ -322,11 +322,10 @@ interface AppProps {
   backups: BackupInfo[];
   about: About | undefined;
   refresh: () => void;
-  onCheckUpdate?: () => Promise<void>;
   onRestored: () => void;
 }
 
-export function AppSection({ api, notify, now, settings, save, autostart, backups, about, refresh, onCheckUpdate, onRestored }: AppProps) {
+export function AppSection({ api, notify, now, settings, save, autostart, backups, about, refresh, onRestored }: AppProps) {
   const [showAll, setShowAll] = useState(false);
   const [restoring, setRestoring] = useState<BackupInfo | null>(null);
   const [leaving, setLeaving] = useState<"quit" | "restart" | null>(null);
@@ -398,22 +397,6 @@ export function AppSection({ api, notify, now, settings, save, autostart, backup
           </div>
         )}
       </div>
-      {about && (
-        <p className="d-foot">
-          {`RL Trainer ${about.version} · Data in ${about.data_dir}`}
-          <button type="button" className="d-link" onClick={() => act(notify, () => api.openDataFolder())}>
-            Open folder
-          </button>
-          {onCheckUpdate && (
-            <button type="button" className="d-link" onClick={onCheckUpdate}>
-              Check for updates
-            </button>
-          )}
-          <button type="button" className="d-link" title={RELEASES_URL} onClick={() => act(notify, () => api.openReleases())}>
-            Releases
-          </button>
-        </p>
-      )}
       {leaving === "quit" && (
         <Confirm
           title="Quit RL Trainer?"
@@ -443,6 +426,41 @@ export function AppSection({ api, notify, now, settings, save, autostart, backup
           onClose={() => setRestoring(null)}
         />
       )}
+    </section>
+  );
+}
+
+interface AboutProps {
+  api: DesktopApi;
+  notify: Notify;
+  about: About | null | undefined;
+  onCheckUpdate?: () => Promise<void>;
+}
+
+/** Version, updates and where the data lives (Settings → About). */
+export function AboutSection({ api, notify, about, onCheckUpdate }: AboutProps) {
+  if (!about) return null;
+  return (
+    <section className="d-sec" aria-label="About">
+      <div className="d-card glass">
+        <Row title={`RL Trainer ${about.version}`} hint="Updates come from the GitHub releases page.">
+          <div className="d-btns">
+            {onCheckUpdate && (
+              <button type="button" className="d-btn" onClick={onCheckUpdate}>
+                Check for updates
+              </button>
+            )}
+            <button type="button" className="d-btn" title={RELEASES_URL} onClick={() => act(notify, () => api.openReleases())}>
+              Releases
+            </button>
+          </div>
+        </Row>
+        <Row title="Your data" hint={`Data in ${about.data_dir}`}>
+          <button type="button" className="d-btn" onClick={() => act(notify, () => api.openDataFolder())}>
+            Open folder
+          </button>
+        </Row>
+      </div>
     </section>
   );
 }

@@ -307,7 +307,11 @@ me_hint: string | null,
 /**
  * The "Get started" card on Sessions was dismissed.
  */
-setup_dismissed: boolean, };
+setup_dismissed: boolean, 
+/**
+ * Sends a random install id and the app version to the relay once a day.
+ */
+usage_ping: boolean, };
 
 export type BackupKind = "daily" | "pre_migration" | "pre_restore" | "pre_edit";
 

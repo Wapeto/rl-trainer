@@ -55,6 +55,8 @@ export function SettingsPage({ api, snapshot, now, notify, reload, onChanged, on
               api={api}
               notify={notify}
               now={now}
+              settings={s}
+              save={save}
               autostart={autostart.data}
               backups={backups.data ?? []}
               about={about.data}

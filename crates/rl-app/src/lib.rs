@@ -22,6 +22,7 @@ pub mod report;
 pub mod settings;
 pub mod testing;
 mod ts_export;
+pub mod usage;
 
 pub use app::{App, AppConfig, AppError, StartupReport};
 

@@ -8,5 +8,6 @@
   "phone_port": 49321,
   "replay_dir": null,
   "session_timeout_min": 30,
-  "setup_dismissed": false
+  "setup_dismissed": false,
+  "usage_ping": true
 }

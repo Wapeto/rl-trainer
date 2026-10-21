@@ -32,6 +32,9 @@ const ME_HINT: &str = "me_hint";
 const SETUP_DISMISSED: &str = "setup_dismissed";
 const DEV_DB_IMPORTED_AT: &str = "dev_db_imported_at";
 const BACKFILL_DONE: &str = "backfill_done";
+const USAGE_PING: &str = "usage_ping";
+const INSTALL_ID: &str = "install_id";
+const LAST_PING_AT: &str = "last_ping_at";
 
 #[derive(Debug, Error)]
 pub enum SettingsError {
@@ -60,6 +63,8 @@ pub struct Settings {
     pub me_hint: Option<String>,
     /// The "Get started" card on Sessions was dismissed.
     pub setup_dismissed: bool,
+    /// Sends a random install id and the app version to the relay once a day.
+    pub usage_ping: bool,
 }
 
 impl Default for Settings {
@@ -75,6 +80,7 @@ impl Default for Settings {
             dev_db_imported_at: None,
             me_hint: None,
             setup_dismissed: false,
+            usage_ping: true,
         }
     }
 }
@@ -106,6 +112,7 @@ pub struct SettingsPatch {
     /// Trimmed, at most 64 characters; empty clears it.
     pub me_hint: Option<String>,
     pub setup_dismissed: Option<bool>,
+    pub usage_ping: Option<bool>,
 }
 
 mod double_option {
@@ -164,6 +171,7 @@ pub fn load(conn: &Connection) -> Result<Settings, SettingsError> {
         dev_db_imported_at: get(conn, DEV_DB_IMPORTED_AT)?.and_then(|v| v.parse().ok()),
         me_hint: get(conn, ME_HINT)?,
         setup_dismissed: parsed(conn, SETUP_DISMISSED, d.setup_dismissed)?,
+        usage_ping: parsed(conn, USAGE_PING, d.usage_ping)?,
     })
 }
 
@@ -207,6 +215,9 @@ pub fn apply_patch(conn: &Connection, patch: &SettingsPatch) -> Result<Settings,
     }
     if let Some(done) = patch.setup_dismissed {
         put(&tx, SETUP_DISMISSED, Some(done.to_string()))?;
+    }
+    if let Some(on) = patch.usage_ping {
+        put(&tx, USAGE_PING, Some(on.to_string()))?;
     }
     if let Some(port) = patch.phone_port {
         put(&tx, PHONE_PORT, Some(port.to_string()))?;
@@ -254,6 +265,26 @@ pub fn set_backfill_done(conn: &Connection) -> Result<(), SettingsError> {
 
 pub fn set_dev_db_imported_at(conn: &Connection, at_ms: i64) -> Result<(), SettingsError> {
     Ok(put(conn, DEV_DB_IMPORTED_AT, Some(at_ms.to_string()))?)
+}
+
+/// This install's random id (32 hex characters), made on first use.
+pub fn install_id(conn: &Connection) -> Result<String, SettingsError> {
+    if let Some(id) = get(conn, INSTALL_ID)? {
+        return Ok(id);
+    }
+    let mut bytes = [0_u8; 16];
+    getrandom::fill(&mut bytes).map_err(|e| SettingsError::Random(e.to_string()))?;
+    let id: String = bytes.iter().map(|b| format!("{b:02x}")).collect();
+    put(conn, INSTALL_ID, Some(id.clone()))?;
+    Ok(id)
+}
+
+pub fn last_ping_at(conn: &Connection) -> Result<Option<i64>, SettingsError> {
+    Ok(get(conn, LAST_PING_AT)?.and_then(|v| v.parse().ok()))
+}
+
+pub fn set_last_ping_at(conn: &Connection, at_ms: i64) -> Result<(), SettingsError> {
+    Ok(put(conn, LAST_PING_AT, Some(at_ms.to_string()))?)
 }
 
 /// 128 random bits, base64url without padding (22 characters).

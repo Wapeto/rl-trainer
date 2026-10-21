@@ -39,7 +39,8 @@ The **Get started** card on the Sessions page walks you through it:
 
 Everything stays on your PC in `%LOCALAPPDATA%\rl-trainer\`: the database, daily backups (the
 last 7 are kept) and logs. There are no accounts and nothing is uploaded, except a report you
-choose to send.
+choose to send. Once a day the app also sends the relay a random install ID and its version, so
+I can count installs. Turn it off in **Settings → App → Count this install**.
 
 ## Feedback
 

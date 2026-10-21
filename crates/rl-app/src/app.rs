@@ -125,6 +125,7 @@ fn undo_patch(patch: &SettingsPatch, before: &Settings) -> SettingsPatch {
             .as_ref()
             .map(|_| before.me_hint.clone().unwrap_or_default()),
         setup_dismissed: patch.setup_dismissed.map(|_| before.setup_dismissed),
+        usage_ping: patch.usage_ping.map(|_| before.usage_ping),
     }
 }
 
@@ -298,6 +299,7 @@ impl App {
         // The game may already be set up: show the Stats API state before it starts.
         app.recheck_stats_api().await;
         app.spawn_first_backfill();
+        app.spawn_usage_ping();
         Ok(app)
     }
 

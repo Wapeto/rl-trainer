@@ -313,6 +313,8 @@ interface AppProps {
   api: DesktopApi;
   notify: Notify;
   now: number;
+  settings: Settings;
+  save: SaveSetting;
   autostart: boolean | null | undefined;
   backups: BackupInfo[];
   about: About | undefined;
@@ -321,7 +323,7 @@ interface AppProps {
   onRestored: () => void;
 }
 
-export function AppSection({ api, notify, now, autostart, backups, about, refresh, onCheckUpdate, onRestored }: AppProps) {
+export function AppSection({ api, notify, now, settings, save, autostart, backups, about, refresh, onCheckUpdate, onRestored }: AppProps) {
   const [showAll, setShowAll] = useState(false);
   const [restoring, setRestoring] = useState<BackupInfo | null>(null);
   const [leaving, setLeaving] = useState<"quit" | "restart" | null>(null);
@@ -348,6 +350,15 @@ export function AppSection({ api, notify, now, autostart, backups, about, refres
           </Row>
         </div>
       )}
+      <div className="d-card glass">
+        <Row title="Count this install" hint="Sends only a random ID and the app version, once a day.">
+          <Switch
+            label="Count this install"
+            on={settings.usage_ping}
+            onChange={(on) => save({ usage_ping: on }, on ? "Counting this install" : "Not counting this install")}
+          />
+        </Row>
+      </div>
       {api.canControlApp && (
         <div className="d-card glass">
           <Row title="RL Trainer" hint="Closing the window keeps it recording in the tray. Quit or restart it here.">

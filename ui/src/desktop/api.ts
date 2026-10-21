@@ -45,6 +45,7 @@ export interface SettingsPatch {
   /** In-game name or account id; empty clears it. */
   me_hint?: string;
   setup_dismissed?: boolean;
+  usage_ping?: boolean;
 }
 
 /** What the Feedback page hands to Rust; the screenshot is base64 without a data: prefix. */

@@ -190,6 +190,14 @@ describe("SettingsPage", () => {
     expect(api.updateSettings).toHaveBeenCalledWith({ replay_dir: "D:\\Replays" });
   });
 
+  it("lets the user stop the daily install count", async () => {
+    const { api } = renderPage();
+    const toggle = await screen.findByRole("switch", { name: "Count this install" });
+    expect(toggle).toHaveAttribute("aria-checked", "true");
+    await userEvent.click(toggle);
+    expect(api.updateSettings).toHaveBeenCalledWith({ usage_ping: false });
+  });
+
   it("imports past games and says how many came in", async () => {
     const { api } = renderPage();
     const section = await screen.findByRole("region", { name: "Replays" });

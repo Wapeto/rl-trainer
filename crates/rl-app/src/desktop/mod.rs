@@ -37,6 +37,8 @@ pub struct About {
     pub version: String,
     /// Where the database, backups and logs live.
     pub data_dir: String,
+    /// A debug build: it never registers itself to start with Windows.
+    pub dev_build: bool,
 }
 
 #[derive(Deserialize)]
@@ -353,6 +355,7 @@ async fn system_no_args(app: &App, command: &str) -> Option<Result<Value, String
         "about" => reply(About {
             version: env!("CARGO_PKG_VERSION").to_owned(),
             data_dir: app.paths().root.display().to_string(),
+            dev_build: cfg!(debug_assertions),
         }),
         "settings" => app.settings().map_err(text).and_then(reply),
         "profiles" => app.profiles().map_err(text).and_then(reply),

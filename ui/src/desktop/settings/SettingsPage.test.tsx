@@ -171,6 +171,13 @@ describe("SettingsPage", () => {
     expect(screen.queryByRole("switch", { name: "Start with Windows" })).toBeNull();
   });
 
+  it("hides autostart in a dev build", async () => {
+    const about = { version: "0.1.0", data_dir: "C:\data", dev_build: true };
+    renderPage(fakeDesktopApi({ about: vi.fn().mockResolvedValue(about) }));
+    expect(await screen.findByText(/RL Trainer 0\.1\.0/)).toBeInTheDocument();
+    expect(screen.queryByRole("switch", { name: "Start with Windows" })).toBeNull();
+  });
+
   it("shows the watched replay folder and lets the user set another", async () => {
     const api = fakeDesktopApi();
     renderPage(api);

@@ -358,7 +358,7 @@ export function AppSection({ api, notify, now, autostart, backups, about, refres
   return (
     <section className="d-sec" aria-label="App">
       <span className="d-k">App</span>
-      {autostart != null && (
+      {autostart != null && !about?.dev_build && (
         <div className="d-card glass">
           <Row title="Start with Windows" hint="Runs in the tray, ready when you launch the game.">
             <Switch label="Start with Windows" on={autostart} onChange={setAutostart} />

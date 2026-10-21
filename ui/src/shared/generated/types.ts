@@ -319,7 +319,11 @@ export type About = { version: string,
 /**
  * Where the database, backups and logs live.
  */
-data_dir: string, };
+data_dir: string, 
+/**
+ * A debug build: it never registers itself to start with Windows.
+ */
+dev_build: boolean, };
 
 export type ReportInfo = { 
 /**

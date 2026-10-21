@@ -765,6 +765,7 @@ mod tests {
         let about = About {
             version: "0.1.0".into(),
             data_dir: "C:\\Users\\me\\AppData\\Local\\rl-trainer".into(),
+            dev_build: false,
         };
         let v = |x: serde_json::Result<serde_json::Value>| x.unwrap();
         vec![

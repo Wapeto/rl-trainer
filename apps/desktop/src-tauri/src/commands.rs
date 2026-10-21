@@ -86,11 +86,18 @@ pub async fn install_update(handle: AppHandle, app: State<'_, App>) -> CmdResult
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn get_autostart(handle: AppHandle) -> CmdResult<bool> {
+    if cfg!(debug_assertions) {
+        return Ok(false);
+    }
     handle.autolaunch().is_enabled().map_err(|e| e.to_string())
 }
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn set_autostart(handle: AppHandle, enabled: bool) -> CmdResult<()> {
+    // A dev build would register its own path and start a stale binary at login.
+    if cfg!(debug_assertions) {
+        return Err("Start with Windows is off in dev builds".into());
+    }
     let manager = handle.autolaunch();
     let result = if enabled {
         manager.enable()

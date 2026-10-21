@@ -7,7 +7,8 @@ import type { DesktopApi } from "../api";
 import { DESKTOP_NOW, desktopFixtures as f } from "../fixtures";
 import { fakeDesktopApi } from "../test/fakeApi";
 import { SettingsPage } from "./SettingsPage";
-import { backupLabel, maskToken } from "./sections";
+import { maskToken } from "./Pairing";
+import { backupLabel } from "./sections";
 
 function renderPage(api: DesktopApi = fakeDesktopApi(), snapshot: AppSnapshot = fixtures.trainingBelow) {
   const notify = vi.fn();

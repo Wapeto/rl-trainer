@@ -1,4 +1,3 @@
-import { Copy } from "lucide-react";
 import { useState } from "react";
 import type { Notify } from "@shared/components/Toast";
 import { dayLabel, timeOfDay } from "@shared/format";
@@ -15,16 +14,14 @@ import type {
 import { act } from "../act";
 import type { DesktopApi, SettingsPatch } from "../api";
 import { Confirm } from "../components/Dialog";
-import { plural } from "../format";
 import { EditSetting, Row, Switch } from "./fields";
+import { Pairing } from "./Pairing";
 import { Select } from "../components/Select";
 
 /** Saves a settings change; returns the error text for the field, or null. */
 export type SaveSetting = (patch: SettingsPatch, okText: string) => Promise<string | null>;
 
 export const RELEASES_URL = "https://github.com/Wapeto/rl-trainer/releases";
-
-export const maskToken = (url: string) => url.replace(/#t=.*/, "#t=••••••••");
 
 const whole = (raw: string) => (/^\d+$/.test(raw) ? Number(raw) : null);
 const number = (raw: string) => (raw !== "" && Number.isFinite(Number(raw)) ? Number(raw) : null);
@@ -83,17 +80,6 @@ export function PhoneSection({ api, notify, settings, pairing, phones, refresh, 
     const ok = await act(notify, () => (on ? api.enablePhone() : api.disablePhone()), on ? "Phone page on" : "Phone page off");
     if (ok) refresh();
   }
-  async function newCode() {
-    if (await act(notify, () => api.regenerateToken(), "New pairing code made")) refresh();
-  }
-  async function copy(url: string) {
-    try {
-      await navigator.clipboard.writeText(url);
-      notify("Link copied", "ok");
-    } catch {
-      notify("Couldn't copy the link", "error");
-    }
-  }
   return (
     <section className="d-sec" aria-label="Phone">
       <span className="d-k">Phone</span>
@@ -105,31 +91,7 @@ export function PhoneSection({ api, notify, settings, pairing, phones, refresh, 
           <Switch label="Phone page" on={settings.phone_enabled} onChange={toggle} />
         </Row>
         {settings.phone_enabled && pairing && (
-          <div className="d-srow d-srow--top">
-            <img
-              className="d-qr"
-              alt="QR code to pair your phone"
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(pairing.qr_svg)}`}
-            />
-            <div className="d-srow__tx">
-              <b>Scan with your phone</b>
-              <span>Or open this address in its browser:</span>
-              <div className="d-url">{maskToken(pairing.url)}</div>
-              <div className="d-btns d-btns--gap">
-                <button type="button" className="d-btn" onClick={() => copy(pairing.url)}>
-                  <Copy className="d-icon" aria-hidden />
-                  Copy link
-                </button>
-                <button type="button" className="d-btn" onClick={newCode}>
-                  New pairing code
-                </button>
-              </div>
-              <span className="d-hint">A new code signs out the phones that use the old one.</span>
-            </div>
-            <span className={phones > 0 ? "d-ok" : "d-warn"}>
-              {phones > 0 ? `${plural(phones, "phone")} connected` : "No phone connected"}
-            </span>
-          </div>
+          <Pairing api={api} pairing={pairing} phones={phones} notify={notify} refresh={refresh} />
         )}
         <Row title="Port" hint="Change only if another app uses it.">
           <EditSetting

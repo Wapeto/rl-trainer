@@ -28,11 +28,12 @@ interface SidebarProps {
   toSaveCount: number;
   gameRunning: boolean;
   phoneConnected: boolean;
+  onPairPhone: () => void;
 }
 
 export const savePhrase = (n: number) => `${n} ${n === 1 ? "replay" : "replays"} to save`;
 
-export function Sidebar({ page, onPage, folded, onFold, reviewCount, toSaveCount, gameRunning, phoneConnected }: SidebarProps) {
+export function Sidebar({ page, onPage, folded, onFold, reviewCount, toSaveCount, gameRunning, phoneConnected, onPairPhone }: SidebarProps) {
   const FoldIcon = folded ? PanelLeftOpen : PanelLeftClose;
   return (
     <aside className={`d-side${folded ? " d-side--rail" : ""}`} aria-label="Main">
@@ -81,10 +82,16 @@ export function Sidebar({ page, onPage, folded, onFold, reviewCount, toSaveCount
           <span className={`d-led${gameRunning ? " d-led--on" : ""}`} aria-hidden />
           <span className="d-label">{gameRunning ? "Rocket League running" : "Rocket League closed"}</span>
         </div>
-        <div title={phoneConnected ? "Phone connected" : "No phone"}>
+        <button
+          type="button"
+          className="d-health__btn"
+          aria-label="Pair a phone"
+          title={phoneConnected ? "Phone connected" : "No phone: click to pair one"}
+          onClick={onPairPhone}
+        >
           <span className={`d-led${phoneConnected ? " d-led--on" : ""}`} aria-hidden />
           <span className="d-label">{phoneConnected ? "Phone connected" : "No phone"}</span>
-        </div>
+        </button>
       </div>
     </aside>
   );

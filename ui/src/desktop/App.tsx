@@ -13,6 +13,7 @@ import { SessionsPage } from "./sessions/SessionsPage";
 import { FeedbackPage } from "./feedback/FeedbackPage";
 import { SettingsPage } from "./settings/SettingsPage";
 import { UpdateBanner } from "./UpdateBanner";
+import { PairingDialog } from "./PairingDialog";
 import { Sidebar, type Page } from "./Sidebar";
 
 /** The first check waits, so the app's start is not slowed. */
@@ -33,6 +34,7 @@ export function DesktopApp({ api, feed, now: fixedNow, storage = browserStorage(
   const [focusId, setFocusId] = useState<number | null>(null);
   const [folded, setFolded] = useState(() => readKey(storage, FOLD_KEY) === "1");
   const [changes, setChanges] = useState(0);
+  const [pairing, setPairing] = useState(false);
   const ticking = useNow(30_000);
   const toast = useToast();
   const [update, setUpdate] = useState<UpdateInfo | null>(null);
@@ -96,7 +98,11 @@ export function DesktopApp({ api, feed, now: fixedNow, storage = browserStorage(
         toSaveCount={toSaveCount}
         gameRunning={snapshot?.game_running ?? false}
         phoneConnected={(snapshot?.phone_clients ?? 0) > 0}
+        onPairPhone={() => setPairing(true)}
       />
+      {pairing && (
+        <PairingDialog api={api} notify={toast.show} phones={snapshot?.phone_clients ?? 0} onClose={() => setPairing(false)} />
+      )}
       {page === "sessions" && <SessionsPage {...pageProps} />}
       {page === "packs" && <PacksPage {...pageProps} />}
       {page === "progress" && (

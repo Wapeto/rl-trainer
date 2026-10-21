@@ -259,6 +259,28 @@ async fn a_failed_port_change_puts_the_firewall_rule_back_for_the_old_port() {
 }
 
 #[tokio::test]
+async fn a_firewall_rule_for_another_program_is_repaired() {
+    let platform = FakePlatform::new();
+    let (_dir, app) = seeded(platform.clone()).await;
+    let adds = || {
+        platform
+            .elevated_calls()
+            .iter()
+            .filter(|c| c.get(1).is_some_and(|a| a == "add-firewall-rule"))
+            .count()
+    };
+    app.enable_phone().await.unwrap();
+    app.disable_phone().await.unwrap();
+    app.enable_phone().await.unwrap();
+    assert_eq!(adds(), 1, "a matching rule needs no prompt");
+    app.disable_phone().await.unwrap();
+    platform.set_firewall_program(Some("C:/Old/rl-trainer.exe".into()));
+    app.enable_phone().await.unwrap();
+    assert_eq!(adds(), 2);
+    app.shutdown().await;
+}
+
+#[tokio::test]
 async fn a_failed_port_change_undoes_the_whole_patch() {
     let (_dir, app) = seeded(FakePlatform::new()).await;
     app.enable_phone_at(SocketAddr::from(([127, 0, 0, 1], 0)))

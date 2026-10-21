@@ -33,10 +33,12 @@ pub struct SessionCard {
     pub casual_matches: i64,
     pub freeplay_activities: i64,
     pub needs_review: bool,
+    /// Built from replay files, not recorded live.
+    pub imported: bool,
 }
 
 /// A finished session with a finished activity, never reviewed or played on after its review.
-const NEEDS_REVIEW: &str = "(s.ended_at IS NOT NULL
+const NEEDS_REVIEW: &str = "(s.ended_at IS NOT NULL AND s.source = 'live'
       AND EXISTS (SELECT 1 FROM block b WHERE b.session_id = s.id AND b.ended_at IS NOT NULL)
       AND (s.reviewed_at IS NULL
            OR EXISTS (SELECT 1 FROM block b
@@ -102,7 +104,7 @@ fn card_columns() -> String {
                WHERE b.session_id = s.id AND m.ranked = 0),
             (SELECT COUNT(*) FROM block b WHERE b.session_id = s.id AND b.kind = 'freeplay'
                AND (b.ended_at IS NULL OR b.ended_at - b.started_at >= {SHORT_FREEPLAY_MS})),
-            {NEEDS_REVIEW}"
+            {NEEDS_REVIEW}, s.source = 'replay'"
     )
 }
 
@@ -116,6 +118,7 @@ fn card_row(r: &Row) -> rusqlite::Result<SessionCard> {
         casual_matches: r.get(5)?,
         freeplay_activities: r.get(6)?,
         needs_review: r.get(7)?,
+        imported: r.get(8)?,
     })
 }
 

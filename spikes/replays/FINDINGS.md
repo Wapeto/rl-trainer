@@ -85,3 +85,14 @@ subtr-actor's `StatsCollector` runs about 60 stat modules in one pass. It took 2
    - 50/50 and kickoff wins and losses, whiffs.
 3. A replay is optional. Every match keeps its live-feed stats; the replay only adds to it. Because saving is manual and history is short, the app should list recorded matches that have no replay and are still in history (newest 20 online matches, under 30 days old), with the oldest flagged as about to drop out.
 4. Pin the subtr-actor version. Its outputs are large and change between releases, and boost units differ between modules, so the stored stats need tests against a few fixture replays (anonymized, or generated, not committed with real names).
+
+## Header for results and backfill
+
+Checked on 2026-10-21 against the newest replays in the local Demos folder (nothing committed).
+
+- `Team0Score` / `Team1Score`: present, but **left out when the score is 0** (read a missing one as 0).
+- `PrimaryPlayerTeam`: the saving player's team; **left out when it is 0**. Prefer the team of the player marked `is_me` in the stats pass.
+- `PlayerStats[]`: `Name`, `Platform`, `Team`, `Score`, `Goals`, `Assists`, `Saves`, `Shots`, `bBot`. `OnlineID` can be `"0"` for Epic players, so match "me" through the stats pass (`remote_id`), not the header.
+- `TotalSecondsPlayed` (regulation is about 300 s), `Date` (`YYYY-MM-DD HH-MM-SS`, UTC), `TeamSize`, `MatchType` (`Online`, `Private`, `FTE`, ...).
+- **No** overtime flag, forfeit flag, playlist id or ranked flag. `MatchType = Online` covers casual and ranked alike.
+- Consequences: an imported game gets `overtime = false`, `ranked = false` (spec §2.2 fallback), the playlist is guessed from `TeamSize` only when unambiguous, and only `Online` replays are imported. A live record keeps its own overtime flag when a replay overrides the score.

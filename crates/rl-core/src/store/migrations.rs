@@ -14,6 +14,7 @@ const MIGRATIONS: &[&str] = &[
     include_str!("../../migrations/0009_replays.sql"),
     include_str!("../../migrations/0010_deleted_matches.sql"),
     include_str!("../../migrations/0011_replay_players.sql"),
+    include_str!("../../migrations/0012_replay_results.sql"),
 ];
 
 pub const SCHEMA_VERSION: i64 = MIGRATIONS.len() as i64;

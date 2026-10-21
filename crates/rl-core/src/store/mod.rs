@@ -5,6 +5,7 @@ pub mod edits;
 pub mod live;
 pub mod migrations;
 pub mod packs;
+pub mod past_games;
 pub mod progress;
 pub mod queries;
 mod recorder;

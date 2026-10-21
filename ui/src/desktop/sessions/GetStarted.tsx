@@ -4,6 +4,7 @@ import { act } from "../act";
 import { useLoad } from "../components/useLoad";
 import type { PageProps } from "../pageProps";
 import { FIXED_TEXT, accountText, statsText } from "../settings/sections";
+import { presetSettingsTab, type SettingsTab } from "../settings/SettingsPage";
 
 interface StepProps {
   done: boolean;
@@ -47,17 +48,25 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
       onChanged();
     }
   }
-  const openSettings = onOpenSettings && (
-    <button type="button" className="d-btn" onClick={onOpenSettings}>
-      Open Settings
-    </button>
-  );
+  const openSettings = (tab: SettingsTab) =>
+    onOpenSettings && (
+      <button
+        type="button"
+        className="d-btn"
+        onClick={() => {
+          presetSettingsTab(tab);
+          onOpenSettings();
+        }}
+      >
+        Open Settings
+      </button>
+    );
   const statsAction = fileOk ? null : stats.fix ? (
     <button type="button" className="d-btn d-btn--warn" onClick={() => run(() => api.fixStatsApi(), FIXED_TEXT)}>
       Fix…
     </button>
   ) : (
-    openSettings
+    openSettings("game")
   );
   return (
     <section className="d-sec d-start" aria-label="Get started">
@@ -78,7 +87,7 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
           done={account}
           title="Your account"
           text={account ? accountText(profiles) : "Open free play, or enter your in-game name in Settings."}
-          action={openSettings}
+          action={openSettings("account")}
         />
         <Step
           done={phone}
@@ -90,7 +99,7 @@ export function GetStarted({ api, snapshot, notify, reload, onChanged, onOpenSet
           }
           action={
             settings.phone_enabled ? (
-              openSettings
+              openSettings("phone")
             ) : (
               <button type="button" className="d-btn" onClick={() => run(() => api.enablePhone(), "Phone page on")}>
                 Turn on phone page

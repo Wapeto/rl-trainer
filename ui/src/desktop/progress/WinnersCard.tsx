@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { DesktopApi } from "../api";
 import { Radar } from "../charts/Radar";
 import { useLoad } from "../components/useLoad";
-import { MIN_AXES, progressAxes, progressGroupAxes } from "../sessions/benchRadar";
+import { MIN_AXES, groupAxes, progressAxes } from "../sessions/benchRadar";
 import { MIN_POOL_MATCHES, STAT_GROUPS } from "../sessions/replayRows";
 import { modeName } from "./format";
 
@@ -17,7 +17,7 @@ export function WinnersCard({ api, teamSize }: { api: DesktopApi; teamSize: numb
   const axes = progressAxes(STAT_GROUPS, bench, teamSize > 1);
   const toggle = (name: string) => setOpen(open === name ? null : name);
   const group = STAT_GROUPS.find((g) => g.name === open);
-  const groupAxes = group ? progressGroupAxes(group, bench, teamSize > 1) : [];
+  const detail = group ? groupAxes(group, bench, teamSize > 1) : [];
   return (
     <section className="d-kpi glass p-winners" aria-label="Against the winners">
       <div className="d-k">Against the winners</div>
@@ -39,10 +39,10 @@ export function WinnersCard({ api, teamSize }: { api: DesktopApi; teamSize: numb
             ))}
           </div>
           {group &&
-            (groupAxes.length >= MIN_AXES ? (
-              <Radar label={`${group.name}: you against the winners`} axes={groupAxes} />
+            (detail.length >= MIN_AXES ? (
+              <Radar label={`${group.name}: you against the winners`} axes={detail} />
             ) : (
-              <p className="d-ins__note">{`Too few ${group.name} stats measured to draw a radar.`}</p>
+              <p className="d-ins__note">{`Too few ${group.name} stats separate winners from losers to draw a radar.`}</p>
             ))}
         </>
       )}

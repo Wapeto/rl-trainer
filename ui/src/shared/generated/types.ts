@@ -161,6 +161,10 @@ matches: number,
  */
 winners: PlayerReplayStats | null, losers: PlayerReplayStats | null, 
 /**
+ * My mean over my rows, scaled the same way; `None` without a timed row of mine.
+ */
+mine: PlayerReplayStats | null, 
+/**
  * Per stat by field name; empty under `MIN_POOL_MATCHES`.
  */
 stats: { [key in string]: BenchStat }, };

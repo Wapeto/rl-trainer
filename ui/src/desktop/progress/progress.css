@@ -32,3 +32,4 @@
 .p-winners__groups { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 8px 0; }
 .p-winners__groups button { font: inherit; font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--d-line); background: none; color: var(--d-mut); cursor: pointer; }
 .p-winners__groups button[aria-pressed="true"] { color: var(--d-blue); border-color: var(--d-blue); }
+.p-winners__groups ~ .c-radar, .p-winners__groups ~ .d-ins__note { margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--d-line); }

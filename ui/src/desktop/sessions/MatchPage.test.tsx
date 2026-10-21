@@ -72,15 +72,14 @@ describe("MatchPage", () => {
     render(<MatchPage api={fakeDesktopApi()} activity={twos} onBack={vi.fn()} />);
     const sum = await screen.findByRole("region", { name: "What stood out" });
     const fig = within(sum).getByRole("figure", { name: "You against the winners, by category" });
-    expect(within(fig).getAllByRole("listitem").map((li) => li.textContent?.split(":")[0])).toEqual(["Boost", "Touches", "Movement"]);
+    expect(within(fig).getAllByRole("listitem").map((li) => li.textContent?.split(":")[0])).toEqual(["Positioning", "Boost", "Touches", "Movement"]);
     expect(within(sum).getByText("Against the winners of your last 20 ranked 2v2s.")).toBeInTheDocument();
   });
 
   it("no overview under 3 groups, but the group radar still shows", async () => {
-    // Movement keeps 1 separating stat, so only Boost and Touches have radars.
-    const stats = { ...f.matchReplay.benchmark.stats };
-    delete stats.pct_supersonic;
-    delete stats.avg_speed_kmh;
+    // Only Boost and Touches keep a separating stat.
+    const keep = ["boost_collected", "big_pads", "pct_zero_boost", "boost_used_supersonic", "touches", "hard_hits"];
+    const stats = Object.fromEntries(Object.entries(f.matchReplay.benchmark.stats).filter(([k]) => keep.includes(k)));
     const api = fakeDesktopApi({ matchReplay: vi.fn().mockResolvedValue({ ...f.matchReplay, benchmark: { ...f.matchReplay.benchmark, stats } }) });
     render(<MatchPage api={api} activity={twos} onBack={vi.fn()} />);
     const sum = await screen.findByRole("region", { name: "What stood out" });

@@ -169,6 +169,20 @@ pub(crate) fn match_replay() -> crate::desktop::MatchReplay {
         me: Some(me),
         winners_pct,
     };
+    // The separating stats, from the losers' level (0.0) to the winners' (1.0).
+    let level = |t: f64, base: PlayerReplayStats| PlayerReplayStats {
+        boost_collected: Some(2500.0 + 500.0 * t),
+        big_pads: Some(8.0 + 4.0 * t),
+        pct_zero_boost: Some(14.0 - 6.0 * t),
+        boost_used_supersonic: Some(40.0 - 20.0 * t),
+        touches: Some(30.0 + 10.0 * t),
+        hard_hits: Some(4.0 + 3.0 * t),
+        first_touches: Some(1.0 + t),
+        avg_speed_kmh: Some(52.0 + 4.0 * t),
+        pct_supersonic: Some(20.0 + 6.0 * t),
+        pct_on_ground: Some(50.0 - 8.0 * t),
+        ..base
+    };
     let stats = [
         ("boost_collected", bench(0.8, 40.0, 62.0)),
         ("big_pads", bench(0.5, 55.0, 58.0)),
@@ -192,8 +206,9 @@ pub(crate) fn match_replay() -> crate::desktop::MatchReplay {
         players,
         benchmark: rl_core::coach::benchmark::Benchmark {
             matches: 20,
-            winners: Some(stats_of(1.5, 66.0, 2.0, Some(140.0))),
-            losers: Some(stats_of(0.5, 58.0, 4.0, Some(150.0))),
+            winners: Some(level(1.0, stats_of(1.5, 66.0, 2.0, Some(140.0)))),
+            losers: Some(level(0.0, stats_of(0.5, 58.0, 4.0, Some(150.0)))),
+            mine: Some(level(0.4, stats_of(2.0, 64.0, 3.0, Some(144.0)))),
             stats,
         },
         insights: vec![

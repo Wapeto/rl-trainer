@@ -38,16 +38,62 @@
 .c-tip--in.c-tip--leftward { transform: translate(calc(-100% - 10px), 0); }
 
 .c-radar { margin: 0; position: relative; }
-.c-radar svg { display: block; width: 100%; max-width: 360px; margin: 0 auto; }
-.c-radar__ring { fill: none; stroke: var(--d-line); }
-.c-radar__winners { fill: rgba(255, 255, 255, 0.08); stroke: var(--d-mut); stroke-width: 1; }
-.c-radar__me { fill: rgba(122, 167, 255, 0.12); stroke: var(--d-blue); stroke-width: 2; }
-.c-radar text { fill: var(--d-mut); font-size: 10px; }
-.c-radar text.c-radar__dim { opacity: 0.45; }
-.c-radar text.c-radar__click { cursor: pointer; }
-.c-radar text.c-radar__click:hover { fill: var(--d-blue); }
-.c-radar__key { display: flex; gap: 6px; align-items: center; justify-content: center; font-size: 11px; color: var(--d-dim); }
-.c-radar__key i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; }
-.c-radar__k-me { background: var(--d-blue); }
-.c-radar__k-winners { background: var(--d-mut); margin-left: 8px; }
-.c-radar__alt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; padding: 0; }
+.c-radar__take { margin: 0; font-size: 13px; color: #d4d8de; line-height: 1.45; }
+.c-radar__take b { font-weight: 800; }
+.c-radar__count { color: var(--d-mut); }
+.c-radar__how { margin: 3px 0 0; font-size: 11.5px; line-height: 1.45; color: var(--d-mut); max-width: 640px; }
+.c-radar__body { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 6px; }
+.c-radar__body--side { flex-direction: row; justify-content: center; gap: 18px; }
+.c-radar__plot { flex: none; outline: none; border-radius: 12px; touch-action: manipulation; }
+.c-radar__plot:focus-visible { box-shadow: 0 0 0 2px rgba(122, 167, 255, 0.55); }
+.c-radar__plot svg { display: block; overflow: visible; }
+.c-radar__panel { width: 236px; max-width: 100%; min-height: 196px; flex: none; display: flex; align-items: center; }
+.c-radar__body:not(.c-radar__body--side) .c-radar__panel { width: 100%; max-width: 420px; }
+.c-radar__disc { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.1); }
+.c-radar__zone-win { fill: rgba(111, 227, 169, 0.035); }
+.c-radar__zone-lose { fill: rgba(240, 114, 127, 0.05); }
+.c-radar__ring-win { fill: none; stroke: var(--green); stroke-opacity: 0.8; stroke-width: 2; }
+.c-radar__ring-lose { fill: none; stroke: var(--red); stroke-opacity: 0.75; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.c-radar__spoke { stroke: rgba(255, 255, 255, 0.07); transition: stroke 0.15s; }
+.c-radar__spoke--out { stroke: rgba(255, 255, 255, 0.13); }
+.c-radar__spoke--on { stroke: rgba(122, 167, 255, 0.7); stroke-width: 1.5; }
+.c-radar__shapes { transform-box: fill-box; transform-origin: center; animation: c-radar-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes c-radar-grow { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .c-radar__shapes { animation: none; } }
+.c-radar__me { stroke: var(--d-blue); stroke-width: 2.25; stroke-linejoin: round; }
+.c-radar__dot-me { fill: var(--d-blue); stroke: #0f1117; stroke-width: 1.5; transition: r 0.15s; }
+.c-radar__label { fill: #f3f4f6; font-weight: 700; transition: fill 0.12s; }
+.c-radar__label--on { fill: var(--d-blue); fill-opacity: 1 !important; }
+.c-radar__imp rect { fill: rgba(255, 255, 255, 0.15); }
+.c-radar__imp rect.c-radar__imp-on { fill: #f3f4f6; }
+.c-radar__dim { fill: #b9bec7; opacity: 0.5; }
+.c-radar__click { cursor: pointer; }
+.c-radar__click:hover { fill: var(--d-blue); }
+.c-radar__card, .c-radar__idle { width: 100%; background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 12px; padding: 12px 14px 11px; font-size: 12px; }
+.c-radar__idle { color: var(--d-mut); line-height: 1.45; }
+.c-radar__idle p { margin: 0 0 4px; }
+.c-radar__idle-t { color: #d4d8de; font-weight: 700; font-size: 12.5px; }
+.c-radar__key { list-style: none; margin: 10px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.07); display: grid; gap: 6px; font-size: 11.5px; color: #c9cdd4; }
+.c-radar__key li { display: flex; align-items: center; gap: 8px; }
+.c-radar__key i { display: inline-block; width: 16px; height: 10px; border-radius: 3px; flex: none; }
+.c-radar__k-me { background: rgba(122, 167, 255, 0.45); border: 1.5px solid var(--d-blue); }
+.c-radar__k-win { height: 0 !important; border-top: 2px solid var(--green); border-radius: 0 !important; }
+.c-radar__k-lose { height: 0 !important; border-top: 1.5px dashed var(--red); border-radius: 0 !important; }
+.c-radar__k-bars { height: 3px !important; border-radius: 2px !important; background: linear-gradient(90deg, #f3f4f6 0 28%, transparent 28% 36%, #f3f4f6 36% 64%, transparent 64% 72%, rgba(255, 255, 255, 0.2) 72%); }
+.c-radar__name { font-size: 13.5px; font-weight: 800; margin-bottom: 8px; color: #f3f4f6; }
+.c-radar__name span { display: block; font-size: 10.5px; font-weight: 700; color: var(--d-dim); margin-top: 1px; }
+.c-radar__vals { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; color: #c9cdd4; }
+.c-radar__vals b { text-align: right; font-weight: 800; }
+.c-radar__strip { position: relative; height: 22px; margin: 14px 4px 2px; }
+.c-radar__strip-track { position: absolute; left: 0; right: 0; top: 9px; height: 4px; border-radius: 3px; background: linear-gradient(90deg, rgba(240, 114, 127, 0.35), rgba(242, 180, 107, 0.35) 45%, rgba(111, 227, 169, 0.45) 75%, rgba(255, 255, 255, 0.12)); }
+.c-radar__strip small { position: absolute; top: -10px; font-size: 9.5px; color: var(--d-dim); transform: translateX(-50%); white-space: nowrap; }
+.c-radar__strip i { position: absolute; top: 5px; width: 2px; height: 12px; background: #d9dce2; }
+.c-radar__strip-me { position: absolute; top: 4px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--d-blue); border: 2px solid #15171c; }
+.c-radar__verdict { margin-top: 9px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.07); font-size: 12px; font-weight: 700; color: var(--d-mut); }
+.c-radar__weight { margin-top: 4px; font-size: 11px; color: var(--d-mut); }
+.c-radar__t-blue { color: var(--d-blue); }
+.c-radar__t-red { color: var(--red); }
+.c-radar__t-amber { color: var(--amber); }
+.c-radar__t-green { color: var(--green); }
+.c-radar__t-grey { color: #c9cdd4; }
+.c-radar__live, .c-radar__alt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; padding: 0; }

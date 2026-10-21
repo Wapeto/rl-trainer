@@ -44,6 +44,8 @@ pub struct Benchmark {
     /// Winners' means, each row scaled to 5 minutes first; `None` under `MIN_POOL_MATCHES`.
     pub winners: Option<PlayerReplayStats>,
     pub losers: Option<PlayerReplayStats>,
+    /// My mean over my rows, scaled the same way; `None` without a timed row of mine.
+    pub mine: Option<PlayerReplayStats>,
     /// Per stat by field name; empty under `MIN_POOL_MATCHES`.
     pub stats: BTreeMap<String, BenchStat>,
 }
@@ -211,6 +213,7 @@ pub fn benchmark(pool: &[PoolRow], matches: usize, me: &[&PlayerReplayStats]) ->
         matches: matches as i64,
         winners: means(true),
         losers: means(false),
+        mine: mean_per_five(&me.iter().copied().collect::<Vec<_>>()),
         stats,
     }
 }
@@ -321,6 +324,18 @@ mod tests {
         let b = benchmark(&pool(), 10, &[&me(300.0, 1.0), &me(300.0, 4.0), &untimed]);
         assert_eq!(b.stats["whiffs"].me, Some(65.0));
         assert_eq!(b.stats["pct_zero_boost"].me, None, "none of my rows has it");
+    }
+
+    #[test]
+    fn my_mean_is_per_five_minutes_over_my_timed_rows() {
+        let untimed = PlayerReplayStats {
+            whiffs: Some(9.0),
+            ..PlayerReplayStats::default()
+        };
+        let b = benchmark(&pool(), 10, &[&me(300.0, 1.0), &me(600.0, 6.0), &untimed]);
+        // 1 and 6 in 10 min = 3 per 5 min: mean 2
+        assert_eq!(b.mine.unwrap().whiffs, Some(2.0));
+        assert_eq!(benchmark(&pool(), 10, &[]).mine, None);
     }
 
     #[test]

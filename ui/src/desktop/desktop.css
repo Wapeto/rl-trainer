@@ -294,3 +294,6 @@ textarea.d-input { min-height: 64px; resize: vertical; }
 .d-step--done .d-srow__tx b { color: var(--d-mut); }
 .d-form label.d-btn { display: inline-flex; flex-direction: row; }
 .d-form label.d-check { flex-direction: row; align-items: center; gap: 8px; }
+/* The pairing block (QR + link + status) needs more room than a confirm dialog. */
+.d-dialog:has(.d-qr) { width: 620px; }
+.d-dialog .d-srow { padding-left: 0; padding-right: 0; }

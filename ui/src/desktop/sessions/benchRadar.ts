@@ -35,20 +35,35 @@ function sides(r: StatRow, bench: Benchmark): string {
   return `winners ${shown(bench.winners)}, losers ${shown(bench.losers)}`;
 }
 
+const UNITS: Record<StatRow["kind"], string> = { raw: "per game", per5: "per 5 min", share: "% of the time", ofTouches: "% of touches" };
+
+/** A stat's value as the stats table shows it, or nothing when it was not measured. */
+function shownValue(r: StatRow, s: PlayerReplayStats | null): string | undefined {
+  const v = s && statValue(r, s);
+  return v == null ? undefined : r.format(v);
+}
+
+/** The card's real numbers: the winners' mean and, on a match page, mine. */
+const values = (r: StatRow, bench: Benchmark, mine: PlayerReplayStats | null) => ({
+  unit: UNITS[r.kind],
+  winnersValue: shownValue(r, bench.winners),
+  you: shownValue(r, mine),
+});
+
 function tip(r: StatRow, bench: Benchmark): string {
   const s = bench.stats[r.key]!;
   return `${r.label}: ${percentiles(s.me, s.winners_pct)}; ${sides(r, bench)}, ${direction(s)}`;
 }
 
 /** The group's separating stats: the MAX_AXES largest gaps, in the group's order. */
-export function groupAxes(group: StatGroup, bench: Benchmark, team: boolean): RadarAxis[] {
+export function groupAxes(group: StatGroup, bench: Benchmark, team: boolean, mine: PlayerReplayStats | null = null): RadarAxis[] {
   if (!team && group.teamOnly) return [];
   const stat = (r: StatRow) => bench.stats[r.key]!;
   const rows = group.rows.filter((r) => (team || !r.teamOnly) && bench.stats[r.key]?.separates);
   const top = new Set([...rows].sort((a, b) => Math.abs(stat(b).gap) - Math.abs(stat(a).gap)).slice(0, MAX_AXES));
   return rows
     .filter((r) => top.has(r))
-    .map((r) => ({ key: r.key, label: r.label, me: stat(r).me, winners: stat(r).winners_pct, tip: tip(r, bench) }));
+    .map((r) => ({ key: r.key, label: r.label, me: stat(r).me, winners: stat(r).winners_pct, tip: tip(r, bench), ...values(r, bench, mine) }));
 }
 
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
@@ -59,7 +74,7 @@ export function overviewAxes(groups: StatGroup[], bench: Benchmark, team: boolea
     const axes = groupAxes(g, bench, team);
     if (axes.length < MIN_AXES) return [];
     const mine = axes.flatMap((a) => (a.me == null ? [] : [a.me]));
-    return [{ key: g.name, label: g.name, me: mine.length > 0 ? mean(mine) : null, winners: mean(axes.map((a) => a.winners)) }];
+    return [{ key: g.name, label: g.name, me: mine.length > 0 ? mean(mine) : null, winners: mean(axes.map((a) => a.winners)), unit: "average rank" }];
   });
 }
 
@@ -71,14 +86,14 @@ export function progressGroupAxes(group: StatGroup, bench: Benchmark, team: bool
     .map((r) => {
       const s = bench.stats[r.key]!;
       return s.separates
-        ? { key: r.key, label: r.label, me: s.me, winners: s.winners_pct, tip: tip(r, bench) }
+        ? { key: r.key, label: r.label, me: s.me, winners: s.winners_pct, tip: tip(r, bench), ...values(r, bench, null) }
         : { key: r.key, label: r.label, me: 50, winners: 50, dim: true, tip: `${r.label}: ${sides(r, bench)}, no clear difference between winners and losers` };
     });
 }
 
 /** Progress: one axis per group with a measured stat; its separating stats averaged, or dimmed at 50 (progress radar spec §3). */
 export function progressAxes(groups: StatGroup[], bench: Benchmark, team: boolean): RadarAxis[] {
-  return groups.flatMap((g) => {
+  return groups.flatMap((g): RadarAxis[] => {
     if (!team && g.teamOnly) return [];
     const stats = g.rows.filter((r) => team || !r.teamOnly).flatMap((r) => bench.stats[r.key] ?? []);
     if (stats.length === 0) return [];
@@ -89,6 +104,6 @@ export function progressAxes(groups: StatGroup[], bench: Benchmark, team: boolea
     const mine = sep.flatMap((s) => (s.me == null ? [] : [s.me]));
     const me = mine.length > 0 ? mean(mine) : null;
     const winners = mean(sep.map((s) => s.winners_pct));
-    return [{ key: g.name, label: g.name, me, winners, tip: `${g.name}: ${percentiles(me, winners)}` }];
+    return [{ key: g.name, label: g.name, me, winners, tip: `${g.name}: ${percentiles(me, winners)}`, unit: "average rank" }];
   });
 }

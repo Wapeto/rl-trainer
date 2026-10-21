@@ -35,6 +35,15 @@ describe("groupAxes", () => {
     expect(axis).toMatchObject({ label: row.label, me: 40, winners: 62 });
     expect(axis.tip).toBe(`${row.label}: you 40th percentile, winners 62nd; winners ${row.format(3000)}, losers ${row.format(2500)}, more is better`);
   });
+
+  it("gives the card the real values: the winners' mean, mine on a match page, and the unit", () => {
+    const row = group("Boost").rows.find((r) => r.key === "boost_collected")!;
+    const b = bench({ boost_collected: st(0.9, 40, 62) });
+    const mine = { ...b.winners!, boost_collected: 2000 };
+    const [axis] = groupAxes(group("Boost"), b, true, mine);
+    expect(axis).toMatchObject({ winnersValue: row.format(3000), you: row.format(2000), unit: "per 5 min" });
+    expect(groupAxes(group("Boost"), b, true)[0].you).toBeUndefined();
+  });
 });
 
 describe("overviewAxes", () => {
@@ -46,8 +55,8 @@ describe("overviewAxes", () => {
 
   it("averages each group with a radar, ignoring my missing values", () => {
     expect(overviewAxes(STAT_GROUPS, b, true)).toEqual([
-      { key: "Rotation", label: "Rotation", me: 50, winners: 60 },
-      { key: "Boost", label: "Boost", me: 30, winners: 70 },
+      { key: "Rotation", label: "Rotation", me: 50, winners: 60, unit: "average rank" },
+      { key: "Boost", label: "Boost", me: 30, winners: 70, unit: "average rank" },
     ]);
   });
 
@@ -84,7 +93,7 @@ describe("progressAxes", () => {
   it("has one axis per measured group: separating stats averaged, the rest dimmed at 50", () => {
     const axes = progressAxes(STAT_GROUPS, b, true);
     expect(axes.map((a) => a.key)).toEqual(["Rotation", "Boost", "Touches"]);
-    expect(axes[1]).toEqual({ key: "Boost", label: "Boost", me: 30, winners: 70, tip: "Boost: you 30th percentile, winners 70th" });
+    expect(axes[1]).toEqual({ key: "Boost", label: "Boost", me: 30, winners: 70, tip: "Boost: you 30th percentile, winners 70th", unit: "average rank" });
     expect(axes[2]).toEqual({ key: "Touches", label: "Touches", me: 50, winners: 50, dim: true, tip: nothingSeparated("Touches", 20) });
   });
 

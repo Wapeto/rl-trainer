@@ -60,6 +60,46 @@ test("the version header is required", async () => {
   assert.match(await error(form(), headers(null)), /version/);
 });
 
+const PING_ID = "0123456789abcdef0123456789abcdef";
+
+function ping(body, headersIn = headers()) {
+  return new Request("http://r/ping", { method: "POST", body: JSON.stringify(body), headers: headersIn });
+}
+
+function pingEnv() {
+  const puts = [];
+  const env = {
+    LIMITER: { limit: async () => ({ success: true }) },
+    INSTALLS: { put: async (key, value, options) => puts.push({ key, value, options }) },
+  };
+  return { env, puts };
+}
+
+test("a ping stores the install for 30 days", async () => {
+  const { env, puts } = pingEnv();
+  const res = await worker.fetch(ping({ id: PING_ID, version: "0.3.0" }), env);
+  assert.equal(res.status, 204);
+  assert.deepEqual(puts, [{ key: PING_ID, value: "0.3.0", options: { expirationTtl: 2592000 } }]);
+});
+
+test("a bad ping is refused and stores nothing", async () => {
+  const { env, puts } = pingEnv();
+  const status = async (req) => (await worker.fetch(req, env)).status;
+  assert.equal(await status(ping({ id: "XYZ", version: "0.3.0" })), 400);
+  assert.equal(await status(ping({ id: PING_ID.toUpperCase(), version: "0.3.0" })), 400);
+  assert.equal(await status(ping({ id: PING_ID, version: "v".repeat(21) })), 400);
+  assert.equal(await status(ping({ id: PING_ID, version: "" })), 400);
+  assert.equal(await status(ping({ id: PING_ID, version: "0.3.0" }, headers(null))), 400);
+  const notJson = new Request("http://r/ping", { method: "POST", body: "nope", headers: headers() });
+  assert.equal(await status(notJson), 400);
+  assert.equal(puts.length, 0);
+});
+
+test("a ping shares the rate limit", async () => {
+  const env = { LIMITER: { limit: async () => ({ success: false }) }, INSTALLS: { put: async () => {} } };
+  assert.equal((await worker.fetch(ping({ id: PING_ID, version: "0.3.0" }), env)).status, 429);
+});
+
 test("only POST /report is served, and the rate limit answers 429", async () => {
   const env = { LIMITER: { limit: async () => ({ success: false }) }, DISCORD_WEBHOOK_URL: "http://x" };
   assert.equal((await worker.fetch(new Request("http://r/other", { method: "POST" }), env)).status, 404);

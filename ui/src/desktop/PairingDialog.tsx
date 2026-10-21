@@ -29,8 +29,14 @@ export function PairingDialog({ api, notify, phones, onClose }: PairingDialogPro
         <Pairing api={api} pairing={pairing.data!} phones={phones} notify={notify} refresh={refresh} />
       ) : (
         <div className="d-confirm">
-          <p>{settings.data ? "The phone page is off." : (settings.error ?? "Loading…")}</p>
-          {settings.data && (
+          <p>
+            {settings.data
+              ? settings.data.phone_enabled
+                ? (pairing.error ?? "Loading…")
+                : "The phone page is off."
+              : (settings.error ?? "Loading…")}
+          </p>
+          {settings.data && !settings.data.phone_enabled && (
             <button type="button" className="d-btn d-btn--primary" onClick={turnOn}>
               Turn on phone page
             </button>

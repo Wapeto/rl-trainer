@@ -199,10 +199,11 @@ describe("SettingsPage", () => {
   });
 
   it("imports past games and says how many came in", async () => {
-    const { api } = renderPage();
+    const { api, notify } = renderPage(fakeDesktopApi({ importPastGames: vi.fn().mockResolvedValue(3) }));
     const section = await screen.findByRole("region", { name: "Replays" });
     await userEvent.click(within(section).getByRole("button", { name: "Import past games" }));
     expect(api.importPastGames).toHaveBeenCalledTimes(1);
+    expect(notify).toHaveBeenCalledWith("3 games imported", "ok");
   });
 
   it("warns when the latest replays could not be read", async () => {

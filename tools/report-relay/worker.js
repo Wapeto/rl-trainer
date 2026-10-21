@@ -103,6 +103,7 @@ export function validatePing(body, headers) {
 }
 
 async function handlePing(request, env) {
+  if (Number(request.headers.get("Content-Length") ?? 0) > MAX_PING_BODY) return reply(400, "ping is too big");
   const body = await request.text();
   if (body.length > MAX_PING_BODY) return reply(400, "ping is too big");
   const checked = validatePing(body, request.headers);

@@ -1,20 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { CX, CY, H, R, W, at, dockCard, radarScale, ringValues, sliceAt } from "./radarGeometry";
+import { CX, CY, H, R, W, at, dockCard, radius, sliceAt } from "./radarGeometry";
 
-describe("radarScale", () => {
-  it("zooms in when every value sits in a narrow band", () => {
-    expect(radarScale([52, 66, 61, 68, 57, 60, 72, 58, 38, 71])).toEqual({ lo: 30, hi: 80, zoomed: true });
-  });
-
-  it("keeps 0–100 when values spread or come close to the centre", () => {
-    expect(radarScale([9, 94, 50])).toEqual({ lo: 0, hi: 100, zoomed: false });
-    expect(radarScale([24, 40])).toEqual({ lo: 0, hi: 100, zoomed: false });
-    expect(radarScale([])).toEqual({ lo: 0, hi: 100, zoomed: false });
-  });
-
-  it("puts rings at round values, the outer edge last", () => {
-    expect(ringValues({ lo: 30, hi: 80, zoomed: true })).toEqual([40, 50, 60, 70, 80]);
-    expect(ringValues({ lo: 0, hi: 100, zoomed: false })).toEqual([25, 50, 75, 100]);
+describe("radius", () => {
+  it("puts the losers' ring at 0.15 + 0.85/4 and the winners' ring at 0.15 + 0.85 * 3/4, clamped to the plot", () => {
+    expect(radius(0)).toBeCloseTo(0.3625);
+    expect(radius(100)).toBeCloseTo(0.7875);
+    expect(radius(-500)).toBeCloseTo(0.15);
+    expect(radius(500)).toBe(1);
   });
 });
 

@@ -171,7 +171,7 @@ function GroupTable({ group, cols, team, flash, bench }: { group: StatGroup; col
     [`d-ps__${c.side}`, c.me && "d-ps__me", c.bench && "d-ps__bench", i === split && "d-ps__split"].filter(Boolean).join(" ");
   return (
     <div className="d-ps__card glass" id={`ps-${group.name}`}>
-      {bench && group !== KEY_STATS && <GroupRadar group={group} bench={bench} team={team} mine={cols.find((c) => c.me)?.stats ?? null} />}
+      {bench && group !== KEY_STATS && <GroupRadar group={group} bench={bench} team={team} />}
       <table className="d-ps" aria-labelledby={`ps-cap-${group.name}`}>
         <caption id={`ps-cap-${group.name}`} className="d-k">
           {group.name}

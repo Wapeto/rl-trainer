@@ -10,26 +10,13 @@ export const PICK_REACH = 1.18;
 /** Room the card keeps from the plot circle. */
 const CLEAR = 12;
 
-export interface Scale {
-  lo: number;
-  hi: number;
-  zoomed: boolean;
-}
+/** The plot's range on every spoke: 0 = the losers' level, 100 = the winners' level. */
+export const T_MIN = -50;
+export const T_MAX = 150;
 
-/** Zoom only when it helps: every value (mine and the winners') sits in a narrow band away from the centre. */
-export function radarScale(values: number[]): Scale {
-  if (values.length === 0) return { lo: 0, hi: 100, zoomed: false };
-  const lo = Math.floor((Math.min(...values) - 8) / 10) * 10;
-  const hi = Math.min(100, Math.ceil((Math.max(...values) + 8) / 10) * 10);
-  return lo >= 20 && hi - lo <= 70 ? { lo, hi, zoomed: true } : { lo: 0, hi: 100, zoomed: false };
-}
-
-/** Round values for the rings: every 10 when zoomed, else every 25; the outer edge is always one. */
-export function ringValues({ lo, hi }: Scale): number[] {
-  const step = hi - lo > 50 ? 25 : 10;
-  const rings: number[] = [];
-  for (let v = Math.ceil((lo + 1) / step) * step; v < hi; v += step) rings.push(v);
-  return [...rings, hi];
+/** How far out (0–1 of the radius) a position sits; the centre keeps a hole so −50 stays visible. */
+export function radius(t: number): number {
+  return 0.15 + ((Math.max(T_MIN, Math.min(T_MAX, t)) - T_MIN) / (T_MAX - T_MIN)) * 0.85;
 }
 
 /** Axis `i` of `n` points from the top, clockwise. */
@@ -41,10 +28,8 @@ export function at(i: number, n: number, r: number): [number, number] {
   return [Math.round((CX + r * R * Math.cos(a)) * 10) / 10, Math.round((CY + r * R * Math.sin(a)) * 10) / 10];
 }
 
-/** Where a value (0–100) sits on axis `i` of `n` under `scale`; below the scale it stays at the centre. */
-export function valuePoint(i: number, n: number, value: number, { lo, hi }: Scale): [number, number] {
-  return at(i, n, Math.max(0, Math.min(1, (value - lo) / (hi - lo))));
-}
+/** Where position `t` sits on axis `i` of `n`. */
+export const valuePoint = (i: number, n: number, t: number): [number, number] => at(i, n, radius(t));
 
 /** The axis whose slice holds the point (dx, dy) from the centre, or null outside the picking reach. */
 export function sliceAt(dx: number, dy: number, n: number): number | null {

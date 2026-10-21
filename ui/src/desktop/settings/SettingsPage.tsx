@@ -91,7 +91,12 @@ export function SettingsPage({ api, snapshot, now, notify, reload, onChanged, on
                   onClick={() => choose(t.id)}
                 >
                   {t.label}
-                  {attention[t.id] && <span className="d-stabs__dot" aria-label="needs attention" />}
+                  {attention[t.id] && (
+                    <>
+                      <span className="d-stabs__dot" aria-hidden="true" />
+                      <span className="d-sr">needs attention</span>
+                    </>
+                  )}
                 </button>
               ))}
             </div>
@@ -133,7 +138,7 @@ export function SettingsPage({ api, snapshot, now, notify, reload, onChanged, on
                   }}
                 />
               )}
-              {tab === "about" && <AboutSection api={api} notify={notify} about={about.data} onCheckUpdate={onCheckUpdate} />}
+              {tab === "about" && <AboutSection api={api} notify={notify} about={about.data} error={about.error} onCheckUpdate={onCheckUpdate} />}
             </div>
           </div>
         )}

@@ -304,7 +304,8 @@ textarea.d-input { min-height: 64px; resize: vertical; }
 .d-stabs__tab:hover { color: #fff; }
 .d-stabs__tab--on { background: rgba(111, 227, 169, 0.1); color: var(--green); }
 .d-stabs__tab:focus-visible { outline: 2px solid rgba(111, 227, 169, 0.5); outline-offset: 1px; }
-.d-stabs__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); flex: none; }
+.d-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.d-stabs__dot { margin-left: auto;  width: 7px; height: 7px; border-radius: 50%; background: var(--amber); flex: none; }
 .d-stabs__panel { flex: 1; min-width: 0; }
 .d-stabs__panel h2 { margin: 0 0 4px; font-size: 16px; }
 .d-stabs__lead { margin: 0 0 14px; color: var(--d-mut); font-size: 12px; }

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Radar, band, takeaway, type RadarAxis } from "./Radar";
+import { Radar, band, steps, takeaway, type RadarAxis } from "./Radar";
+import { labelLines } from "./radarGeometry";
 
 const core: RadarAxis[] = [
   { key: "boost", label: "Boost collected", t: 50, importance: 0.6, you: "2,310", winnersValue: "2,565", losersValue: "2,100", unit: "per 5 min" },
@@ -13,11 +14,21 @@ const plotOf = (name: string) => screen.getByRole("group", { name: `${name}. Arr
 const cardOf = (c: HTMLElement) => c.querySelector(".c-radar__card") as HTMLElement;
 
 describe("Radar", () => {
-  it("labels each axis with its name, with a 3-step bar scaled by importance", () => {
+  it("labels each axis with its name, wrapped when long, with a 3-step bar by importance", () => {
     const { container } = render(<Radar label="Core" axes={core} />);
-    expect([...container.querySelectorAll(".c-radar__label")].map((t) => t.textContent)).toEqual(core.map((a) => a.label));
-    const steps = [...container.querySelectorAll(".c-radar__imp")].map((g) => g.querySelectorAll(".c-radar__imp-on").length);
-    expect(steps).toEqual([2, 3, 1, 3]); // 0.6, 0.8 (most), 0.4 (least), 0.7 of 0.4–0.8
+    const labels = [...container.querySelectorAll(".c-radar__label")];
+    expect(labels.map((t) => [...t.querySelectorAll("tspan")].map((l) => l.textContent))).toEqual(core.map((a) => labelLines(a.label)));
+    const bars = [...container.querySelectorAll(".c-radar__imp")].map((g) => g.querySelectorAll(".c-radar__imp-on").length);
+    expect(bars).toEqual([2, 3, 1, 2]); // 0.6, 0.8, 0.4, 0.7
+  });
+
+  it("keeps a fixed panel: how to read it until a stat is picked", () => {
+    const { container } = render(<Radar label="Core" axes={core} />);
+    const panel = container.querySelector(".c-radar__panel") as HTMLElement;
+    expect(within(panel).getByText("Point at a stat to see your numbers")).toBeInTheDocument();
+    fireEvent.keyDown(plotOf("Core"), { key: "ArrowRight" });
+    expect(within(panel).getByText("Boost collected")).toBeInTheDocument();
+    expect(within(panel).queryByText("Point at a stat to see your numbers")).toBeNull();
   });
 
   it("says what to work on, and how many are at the winners' level", () => {
@@ -83,9 +94,12 @@ describe("Radar", () => {
     const { container } = render(
       <Radar label="r" axes={[...core.slice(0, 2), { key: "m", label: "Mechanics", t: null, importance: 0, dim: true, tip: "Nothing in Mechanics separated winners from losers." }]} onAxis={onAxis} />,
     );
-    fireEvent.click(screen.getByText("Time at 0 boost", { selector: "text" }));
+    const labels = container.querySelectorAll(".c-radar__label");
+    fireEvent.click(labels[1]);
     expect(onAxis).toHaveBeenCalledWith("zero");
-    expect(screen.getByText("Mechanics")).toHaveClass("c-radar__dim");
+    expect(labels[2]).toHaveClass("c-radar__dim");
+    expect(container.querySelectorAll(".c-radar__dot-me")).toHaveLength(2); // no point on the dimmed axis
+    expect(container.querySelector(".c-radar__me")?.getAttribute("points")?.split(" ")).toHaveLength(2);
     const plot = plotOf("r");
     ["ArrowRight", "ArrowRight", "ArrowRight"].forEach((key) => fireEvent.keyDown(plot, { key }));
     expect(within(cardOf(container)).getByText("Nothing in Mechanics separated winners from losers.")).toBeInTheDocument();
@@ -96,6 +110,12 @@ describe("band", () => {
   it("names the zones", () => {
     expect([-1, 0, 39, 40, 84, 85, 115, 116].map((t) => band(t).tone)).toEqual(["red", "amber", "amber", "amber", "amber", "green", "green", "grey"]);
     expect(band(62.4).text).toBe("62% of the way to the winners");
+  });
+});
+
+describe("steps", () => {
+  it("uses the same small, medium and large cut-offs as the card's wording", () => {
+    expect([0.3, 0.49, 0.5, 0.79, 0.8, 1.4].map(steps)).toEqual([1, 1, 2, 2, 3, 3]);
   });
 });
 

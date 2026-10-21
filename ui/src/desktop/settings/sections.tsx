@@ -434,12 +434,14 @@ interface AboutProps {
   api: DesktopApi;
   notify: Notify;
   about: About | null | undefined;
+  /** Why `about` did not load. */
+  error?: string | null;
   onCheckUpdate?: () => Promise<void>;
 }
 
 /** Version, updates and where the data lives (Settings → About). */
-export function AboutSection({ api, notify, about, onCheckUpdate }: AboutProps) {
-  if (!about) return null;
+export function AboutSection({ api, notify, about, error, onCheckUpdate }: AboutProps) {
+  if (!about) return <p className="d-empty">{error ?? "Loading…"}</p>;
   return (
     <section className="d-sec" aria-label="About">
       <div className="d-card glass">

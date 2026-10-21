@@ -55,14 +55,14 @@ export function groupAxes(group: StatGroup, bench: Benchmark, team: boolean): Ra
 /** One axis from a group's stats: their mean position and importance. */
 function groupAxis(name: string, axes: RadarAxis[]): RadarAxis {
   const ts = axes.flatMap((a) => (a.t == null ? [] : [a.t]));
-  return { key: name, label: name, t: ts.length > 0 ? mean(ts) : null, importance: mean(axes.map((a) => a.importance)), unit: `average of ${axes.length} stats` };
+  return { key: name, label: name, t: ts.length > 0 ? mean(ts) : null, importance: mean(axes.map((a) => a.importance)), unit: axes.length === 1 ? "from 1 stat" : `average of ${axes.length} stats` };
 }
 
-/** One axis per group that has a radar (spec §4.1). */
+/** One axis per group with a separating stat, the same rule as Progress without its dimmed groups (spec §4.1). */
 export function overviewAxes(groups: StatGroup[], bench: Benchmark, team: boolean): RadarAxis[] {
   return groups.flatMap((g) => {
-    const axes = groupAxes(g, bench, team);
-    return axes.length < MIN_AXES ? [] : [groupAxis(g.name, axes)];
+    const axes = separating(g, bench, team);
+    return axes.length === 0 ? [] : [groupAxis(g.name, axes)];
   });
 }
 

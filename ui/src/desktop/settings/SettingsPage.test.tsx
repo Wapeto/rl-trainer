@@ -241,8 +241,14 @@ describe("SettingsPage", () => {
     renderPage(fakeDesktopApi(), off);
     const game = await screen.findByRole("tab", { name: /^Game/ });
     expect(game).toHaveAttribute("aria-selected", "true");
-    expect(within(game).getByLabelText("needs attention")).toBeInTheDocument();
+    expect(game).toHaveAccessibleName("Game needs attention");
     expect(screen.getByRole("tab", { name: /^Phone/ })).not.toHaveAttribute("aria-selected", "true");
+  });
+
+  it("says when the About details could not load", async () => {
+    renderPage(fakeDesktopApi({ about: vi.fn().mockRejectedValue(new Error("the database is locked")) }));
+    await openTab("About");
+    expect(await screen.findByText(/the database is locked/)).toBeInTheDocument();
   });
 
   it("opens the account tab when no account is tracked", async () => {

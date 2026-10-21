@@ -40,7 +40,7 @@ describe("WinnersCard", () => {
     expect(screen.getByRole("figure", { name: "Boost: you against the winners" })).toBeInTheDocument();
     await userEvent.click(button);
     expect(screen.queryByRole("figure", { name: "Boost: you against the winners" })).toBeNull();
-    await userEvent.click(screen.getAllByText("Boost").find((e) => e.tagName === "text")!);
+    await userEvent.click(screen.getAllByText("Boost").find((e) => e.tagName === "tspan")!);
     expect(screen.getByRole("figure", { name: "Boost: you against the winners" })).toBeInTheDocument();
   });
 

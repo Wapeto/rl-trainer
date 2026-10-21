@@ -69,14 +69,16 @@ describe("overviewAxes", () => {
     secs_first_man: st(0.5), secs_second_man: st(0.5), pct_most_back: st(0.5),
   });
 
-  it("averages each group with a radar: position and importance", () => {
+  it("averages each group with a separating stat: position and importance", () => {
     expect(overviewAxes(STAT_GROUPS, b, true)).toEqual([
+      { key: "Rotation", label: "Rotation", t: 50, importance: 0.5, unit: "from 1 stat" },
       { key: "Boost", label: "Boost", t: expect.closeTo((50 + 0 + 0) / 3, 5), importance: expect.closeTo((0.9 + 0.5 + 1) / 3, 5), unit: "average of 3 stats" },
     ]);
   });
 
   it("skips team-only groups in 1v1", () => {
     expect(overviewAxes(STAT_GROUPS, b, false).map((a) => a.key)).toEqual(["Boost"]);
+    expect(overviewAxes(STAT_GROUPS, bench({ boost_collected: st(0.1) }), true)).toEqual([]);
   });
 });
 

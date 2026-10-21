@@ -1,4 +1,3 @@
-import { Copy } from "lucide-react";
 import { useState } from "react";
 import type { Notify } from "@shared/components/Toast";
 import { dayLabel, timeOfDay } from "@shared/format";
@@ -15,16 +14,14 @@ import type {
 import { act } from "../act";
 import type { DesktopApi, SettingsPatch } from "../api";
 import { Confirm } from "../components/Dialog";
-import { plural } from "../format";
 import { EditSetting, Row, Switch } from "./fields";
+import { Pairing } from "./Pairing";
 import { Select } from "../components/Select";
 
 /** Saves a settings change; returns the error text for the field, or null. */
 export type SaveSetting = (patch: SettingsPatch, okText: string) => Promise<string | null>;
 
 export const RELEASES_URL = "https://github.com/Wapeto/rl-trainer/releases";
-
-export const maskToken = (url: string) => url.replace(/#t=.*/, "#t=••••••••");
 
 const whole = (raw: string) => (/^\d+$/.test(raw) ? Number(raw) : null);
 const number = (raw: string) => (raw !== "" && Number.isFinite(Number(raw)) ? Number(raw) : null);
@@ -83,17 +80,6 @@ export function PhoneSection({ api, notify, settings, pairing, phones, refresh, 
     const ok = await act(notify, () => (on ? api.enablePhone() : api.disablePhone()), on ? "Phone page on" : "Phone page off");
     if (ok) refresh();
   }
-  async function newCode() {
-    if (await act(notify, () => api.regenerateToken(), "New pairing code made")) refresh();
-  }
-  async function copy(url: string) {
-    try {
-      await navigator.clipboard.writeText(url);
-      notify("Link copied", "ok");
-    } catch {
-      notify("Couldn't copy the link", "error");
-    }
-  }
   return (
     <section className="d-sec" aria-label="Phone">
       <span className="d-k">Phone</span>
@@ -105,31 +91,7 @@ export function PhoneSection({ api, notify, settings, pairing, phones, refresh, 
           <Switch label="Phone page" on={settings.phone_enabled} onChange={toggle} />
         </Row>
         {settings.phone_enabled && pairing && (
-          <div className="d-srow d-srow--top">
-            <img
-              className="d-qr"
-              alt="QR code to pair your phone"
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(pairing.qr_svg)}`}
-            />
-            <div className="d-srow__tx">
-              <b>Scan with your phone</b>
-              <span>Or open this address in its browser:</span>
-              <div className="d-url">{maskToken(pairing.url)}</div>
-              <div className="d-btns d-btns--gap">
-                <button type="button" className="d-btn" onClick={() => copy(pairing.url)}>
-                  <Copy className="d-icon" aria-hidden />
-                  Copy link
-                </button>
-                <button type="button" className="d-btn" onClick={newCode}>
-                  New pairing code
-                </button>
-              </div>
-              <span className="d-hint">A new code signs out the phones that use the old one.</span>
-            </div>
-            <span className={phones > 0 ? "d-ok" : "d-warn"}>
-              {phones > 0 ? `${plural(phones, "phone")} connected` : "No phone connected"}
-            </span>
-          </div>
+          <Pairing api={api} pairing={pairing} phones={phones} notify={notify} refresh={refresh} />
         )}
         <Row title="Port" hint="Change only if another app uses it.">
           <EditSetting
@@ -196,15 +158,34 @@ export function GameSection({ api, notify, settings, status, live, save }: GameP
 }
 
 interface ReplaysProps {
+  api: DesktopApi;
+  notify: Notify;
+  refresh: () => void;
   settings: Settings;
   status: ReplayStatus | undefined;
   save: SaveSetting;
+  /** Tells the other pages (Sessions) that imported games were added. */
+  onChanged?: () => void;
 }
 
 /** The replay folder being watched and what was found in it (spec §4.1, §9). */
-export function ReplaysSection({ settings, status, save }: ReplaysProps) {
+export function ReplaysSection({ api, notify, refresh, settings, status, save, onChanged }: ReplaysProps) {
+  const [importing, setImporting] = useState(false);
   const c = status?.counts;
   const folders = status?.folders ?? [];
+  async function importPast() {
+    setImporting(true);
+    let n = 0;
+    const ok = await act(notify, async () => {
+      n = await api.importPastGames();
+    });
+    setImporting(false);
+    if (ok) {
+      notify(n === 0 ? "No new games found" : `${n} ${n === 1 ? "game" : "games"} imported`, "ok");
+      refresh();
+      if (n > 0) onChanged?.();
+    }
+  }
   return (
     <section className="d-sec" aria-label="Replays">
       <span className="d-k">Replays</span>
@@ -226,6 +207,11 @@ export function ReplaysSection({ settings, status, save }: ReplaysProps) {
               save({ replay_dir: raw === "" ? null : raw }, raw === "" ? "The game's folder will be used" : "Folder saved")
             }
           />
+        </Row>
+        <Row title="Past games" hint="Adds your newest replays that were never recorded live, as sessions of their own.">
+          <button type="button" className="d-btn" disabled={importing} onClick={importPast}>
+            {importing ? "Importing…" : "Import past games"}
+          </button>
         </Row>
         {c && (
           <Row title="Imported" hint={c.last_error ?? undefined}>
@@ -330,6 +316,8 @@ interface AppProps {
   api: DesktopApi;
   notify: Notify;
   now: number;
+  settings: Settings;
+  save: SaveSetting;
   autostart: boolean | null | undefined;
   backups: BackupInfo[];
   about: About | undefined;
@@ -338,7 +326,7 @@ interface AppProps {
   onRestored: () => void;
 }
 
-export function AppSection({ api, notify, now, autostart, backups, about, refresh, onCheckUpdate, onRestored }: AppProps) {
+export function AppSection({ api, notify, now, settings, save, autostart, backups, about, refresh, onCheckUpdate, onRestored }: AppProps) {
   const [showAll, setShowAll] = useState(false);
   const [restoring, setRestoring] = useState<BackupInfo | null>(null);
   const [leaving, setLeaving] = useState<"quit" | "restart" | null>(null);
@@ -358,13 +346,22 @@ export function AppSection({ api, notify, now, autostart, backups, about, refres
   return (
     <section className="d-sec" aria-label="App">
       <span className="d-k">App</span>
-      {autostart != null && (
+      {autostart != null && !about?.dev_build && (
         <div className="d-card glass">
           <Row title="Start with Windows" hint="Runs in the tray, ready when you launch the game.">
             <Switch label="Start with Windows" on={autostart} onChange={setAutostart} />
           </Row>
         </div>
       )}
+      <div className="d-card glass">
+        <Row title="Count this install" hint="Sends only a random ID and the app version, once a day.">
+          <Switch
+            label="Count this install"
+            on={settings.usage_ping}
+            onChange={(on) => save({ usage_ping: on }, on ? "Counting this install" : "Not counting this install")}
+          />
+        </Row>
+      </div>
       {api.canControlApp && (
         <div className="d-card glass">
           <Row title="RL Trainer" hint="Closing the window keeps it recording in the tray. Quit or restart it here.">

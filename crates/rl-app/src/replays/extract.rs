@@ -2,6 +2,7 @@
 //! collector's output is read as JSON: its module types are not public, and the spike read the
 //! same JSON paths (spikes/replays/FINDINGS.md §4).
 
+use rl_core::store::past_games::ReplayOutcome;
 use rl_core::store::replays::{PlayerReplayStats, ReplayPlayer, ReplayStats, LOW_BOOST};
 use serde_json::Value;
 
@@ -63,16 +64,38 @@ impl PlayerKey {
 }
 
 pub fn read_guid(bytes: &[u8]) -> Result<Option<String>, ExtractError> {
+    Ok(read_header_ids(bytes)?.0)
+}
+
+/// What "Import past games" keys a game by: its `MatchGUID`, or for older replays without one
+/// (most replays before late 2026, FINDINGS) the replay's own `Id`, prefixed so it can never
+/// equal a live match's GUID.
+pub fn past_game_key(bytes: &[u8]) -> Result<Option<String>, ExtractError> {
+    let (guid, id) = read_header_ids(bytes)?;
+    Ok(pick_key(guid, id))
+}
+
+fn pick_key(guid: Option<String>, id: Option<String>) -> Option<String> {
+    guid.or_else(|| id.map(|id| format!("{REPLAY_ID_KEY}{id}")))
+}
+
+pub const REPLAY_ID_KEY: &str = "replay:";
+
+fn read_header_ids(bytes: &[u8]) -> Result<(Option<String>, Option<String>), ExtractError> {
     let replay = boxcars::ParserBuilder::new(bytes)
         .never_parse_network_data()
         .parse()
         .map_err(|e| ExtractError::Parse(e.to_string()))?;
-    Ok(replay
-        .properties
-        .iter()
-        .find(|(k, _)| k == "MatchGUID")
-        .and_then(|(_, v)| v.as_string())
-        .map(str::to_owned))
+    let prop = |name: &str| {
+        replay
+            .properties
+            .iter()
+            .find(|(k, _)| k == name)
+            .and_then(|(_, v)| v.as_string())
+            .filter(|s| !s.is_empty())
+            .map(str::to_owned)
+    };
+    Ok((prop("MatchGUID"), prop("Id")))
 }
 
 /// The replay's human (not bot) players, in team order. Tests pick their "me" from it, so no
@@ -100,6 +123,69 @@ pub fn human_keys(bytes: &[u8]) -> Result<Vec<PlayerKey>, ExtractError> {
 pub struct Extracted {
     pub mine: ReplayStats,
     pub players: Vec<ReplayPlayer>,
+    /// The final score from the header; `None` when my team is not known.
+    pub outcome: Option<ReplayOutcome>,
+    pub game: GameHeader,
+}
+
+/// What the header says about the game itself (spike: spikes/replays/FINDINGS.md).
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct GameHeader {
+    /// The header `Date` (UTC), when the replay was saved: the end of the game.
+    pub ended_at_ms: Option<i64>,
+    pub seconds_played: Option<f64>,
+    pub team_size: Option<i64>,
+    pub arena: Option<String>,
+    /// `Online`, `Private`, `FTE`, ...: only online games are imported as past games.
+    pub match_type: Option<String>,
+}
+
+fn prop<'a>(replay: &'a boxcars::Replay, key: &str) -> Option<&'a boxcars::HeaderProp> {
+    replay
+        .properties
+        .iter()
+        .find(|(k, _)| k == key)
+        .map(|(_, v)| v)
+}
+
+fn game_header(replay: &boxcars::Replay) -> GameHeader {
+    GameHeader {
+        ended_at_ms: prop(replay, "Date")
+            .and_then(|p| p.as_string())
+            .and_then(|d| chrono::NaiveDateTime::parse_from_str(d, "%Y-%m-%d %H-%M-%S").ok())
+            .map(|d| d.and_utc().timestamp_millis()),
+        seconds_played: prop(replay, "TotalSecondsPlayed")
+            .and_then(|p| p.as_float())
+            .map(f64::from),
+        team_size: prop(replay, "TeamSize")
+            .and_then(|p| p.as_i32())
+            .map(i64::from),
+        arena: prop(replay, "MapName")
+            .and_then(|p| p.as_string())
+            .map(str::to_owned),
+        match_type: prop(replay, "MatchType")
+            .and_then(|p| p.as_string())
+            .map(str::to_owned),
+    }
+}
+
+/// The header leaves a team's score out when it is 0.
+fn outcome(replay: &boxcars::Replay, players: &[ReplayPlayer]) -> Option<ReplayOutcome> {
+    let my_team = players.iter().find(|p| p.is_me)?.team;
+    let score = |key| {
+        prop(replay, key)
+            .and_then(|p| p.as_i32())
+            .map_or(0, i64::from)
+    };
+    let (mine, theirs) = if my_team == 0 {
+        (score("Team0Score"), score("Team1Score"))
+    } else {
+        (score("Team1Score"), score("Team0Score"))
+    };
+    Some(ReplayOutcome {
+        my_score: mine,
+        their_score: theirs,
+    })
 }
 
 pub fn extract(bytes: &[u8], me: &PlayerKey) -> Result<Option<Extracted>, ExtractError> {
@@ -118,9 +204,12 @@ pub fn extract(bytes: &[u8], me: &PlayerKey) -> Result<Option<Extracted>, Extrac
         .get_stats(&replay)
         .map_err(|e| ExtractError::Stats(format!("{e:?}")))?;
     let json = serde_json::to_value(&stats).map_err(|e| ExtractError::Stats(e.to_string()))?;
+    let players = players(&json, &boosts, me);
     Ok(Some(Extracted {
         mine: from_modules(&json["modules"], my_boost, me),
-        players: players(&json, &boosts, me),
+        outcome: outcome(&replay, &players),
+        game: game_header(&replay),
+        players,
     }))
 }
 
@@ -376,6 +465,14 @@ mod tests {
 
     /// An online replay. It is not committed (it holds players' names and account ids), so the
     /// tests that need it skip, with a note, when it is missing.
+    #[test]
+    fn a_past_game_is_keyed_by_its_guid_else_by_its_replay_id() {
+        let s = |v: &str| Some(v.to_owned());
+        assert_eq!(pick_key(s("ABC"), s("F00")), s("ABC"));
+        assert_eq!(pick_key(None, s("F00")), s("replay:F00"));
+        assert_eq!(pick_key(None, None), None);
+    }
+
     fn fixture() -> Option<Vec<u8>> {
         let path = concat!(
             env!("CARGO_MANIFEST_DIR"),
@@ -430,6 +527,24 @@ mod tests {
         assert!((s.tracked_seconds - EXPECTED_TRACKED).abs() < 0.01);
         assert!((s.pct_behind_ball - EXPECTED_BEHIND).abs() < 0.01);
         assert!((0.0..=100.0).contains(&s.pct_defensive_third));
+    }
+
+    #[test]
+    fn the_header_gives_the_score_and_the_game() {
+        let Some(bytes) = fixture() else { return };
+        let got = extract(&bytes, &me(&bytes)).unwrap().unwrap();
+        let o = got.outcome.expect("my team is known");
+        assert_eq!(
+            o.my_score + o.their_score,
+            3,
+            "the fixture ended 3-0 or 0-3"
+        );
+        assert!(
+            o.my_score == 0 || o.their_score == 0,
+            "a missing score reads as 0"
+        );
+        assert_eq!(got.game.team_size, Some(2));
+        assert!(got.game.ended_at_ms.is_some() && got.game.seconds_played > Some(300.0));
     }
 
     #[test]

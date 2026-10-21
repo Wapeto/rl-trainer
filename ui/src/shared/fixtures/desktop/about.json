@@ -1,4 +1,5 @@
 {
   "data_dir": "C:\\Users\\me\\AppData\\Local\\rl-trainer",
+  "dev_build": false,
   "version": "0.1.0"
 }

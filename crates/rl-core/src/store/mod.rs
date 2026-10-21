@@ -5,6 +5,7 @@ pub mod edits;
 pub mod live;
 pub mod migrations;
 pub mod packs;
+pub mod past_games;
 pub mod progress;
 pub mod queries;
 mod recorder;
@@ -337,6 +338,48 @@ mod tests {
             )
             .unwrap();
         assert_eq!(row, (100, None, None));
+    }
+
+    #[test]
+    fn migration_14_skips_the_automatic_import_only_for_logs_that_had_games() {
+        let done = |conn: &Connection| {
+            count(
+                conn,
+                "SELECT COUNT(*) FROM setting WHERE key = 'backfill_done' AND value = 'true'",
+            )
+        };
+        let mut fresh = Connection::open_in_memory().unwrap();
+        migrations::migrate(&mut fresh).unwrap();
+        assert_eq!(done(&fresh), 0, "a new install keeps the automatic import");
+
+        let mut played = Connection::open_in_memory().unwrap();
+        migrations::migrate_to(&mut played, 13).unwrap();
+        played
+            .execute_batch(
+                "INSERT INTO session (id, started_at) VALUES (1, 0);
+                 INSERT INTO block (id, session_id, kind, started_at) VALUES (1, 1, 'match', 0);
+                 INSERT INTO match_record (block_id, match_guid, ranked, arena, result, team_score,
+                    opponent_score, overtime, score, goals, assists, saves, shots, touches, demos,
+                    epic_saves, avg_boost, pct_zero_boost, pct_supersonic, metrics_partial,
+                    scoreboard_json)
+                 VALUES (1, 'G1', 1, 'Stadium_P', 'win', 3, 1, 0, 400, 2, 0, 1, 3, 20, 0, 0,
+                    50, 5, 10, 0, '[]');",
+            )
+            .unwrap();
+        migrations::migrate(&mut played).unwrap();
+        assert_eq!(done(&played), 1);
+
+        let mut emptied = Connection::open_in_memory().unwrap();
+        migrations::migrate_to(&mut emptied, 13).unwrap();
+        emptied
+            .execute("INSERT INTO deleted_match (started_at) VALUES (5)", [])
+            .unwrap();
+        migrations::migrate(&mut emptied).unwrap();
+        assert_eq!(
+            done(&emptied),
+            1,
+            "everything deleted still counts as an upgrade"
+        );
     }
 
     #[test]

@@ -7,12 +7,14 @@ import type { DesktopApi } from "../api";
 import { DESKTOP_NOW, desktopFixtures as f } from "../fixtures";
 import { fakeDesktopApi } from "../test/fakeApi";
 import { SettingsPage } from "./SettingsPage";
-import { backupLabel, maskToken } from "./sections";
+import { maskToken } from "./Pairing";
+import { backupLabel } from "./sections";
 
 function renderPage(api: DesktopApi = fakeDesktopApi(), snapshot: AppSnapshot = fixtures.trainingBelow) {
   const notify = vi.fn();
-  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={notify} reload="r" onChanged={vi.fn()} />);
-  return { api, notify };
+  const onChanged = vi.fn();
+  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={notify} reload="r" onChanged={onChanged} />);
+  return { api, notify, onChanged };
 }
 
 describe("SettingsPage", () => {
@@ -171,6 +173,13 @@ describe("SettingsPage", () => {
     expect(screen.queryByRole("switch", { name: "Start with Windows" })).toBeNull();
   });
 
+  it("hides autostart in a dev build", async () => {
+    const about = { version: "0.1.0", data_dir: "C:\data", dev_build: true };
+    renderPage(fakeDesktopApi({ about: vi.fn().mockResolvedValue(about) }));
+    expect(await screen.findByText(/RL Trainer 0\.1\.0/)).toBeInTheDocument();
+    expect(screen.queryByRole("switch", { name: "Start with Windows" })).toBeNull();
+  });
+
   it("shows the watched replay folder and lets the user set another", async () => {
     const api = fakeDesktopApi();
     renderPage(api);
@@ -180,6 +189,23 @@ describe("SettingsPage", () => {
     await userEvent.type(within(section).getByLabelText("Replay folder"), "D:\\Replays");
     await userEvent.click(within(section).getByRole("button", { name: "Save" }));
     expect(api.updateSettings).toHaveBeenCalledWith({ replay_dir: "D:\\Replays" });
+  });
+
+  it("lets the user stop the daily install count", async () => {
+    const { api } = renderPage();
+    const toggle = await screen.findByRole("switch", { name: "Count this install" });
+    expect(toggle).toHaveAttribute("aria-checked", "true");
+    await userEvent.click(toggle);
+    expect(api.updateSettings).toHaveBeenCalledWith({ usage_ping: false });
+  });
+
+  it("imports past games and says how many came in", async () => {
+    const { api, notify, onChanged } = renderPage(fakeDesktopApi({ importPastGames: vi.fn().mockResolvedValue(3) }));
+    const section = await screen.findByRole("region", { name: "Replays" });
+    await userEvent.click(within(section).getByRole("button", { name: "Import past games" }));
+    expect(api.importPastGames).toHaveBeenCalledTimes(1);
+    expect(notify).toHaveBeenCalledWith("3 games imported", "ok");
+    expect(onChanged).toHaveBeenCalled(); // Sessions shows the new days without a reload
   });
 
   it("warns when the latest replays could not be read", async () => {

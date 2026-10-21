@@ -2,6 +2,12 @@ name = "rl-trainer-report-relay"
 main = "worker.js"
 compatibility_date = "2026-10-01"
 
+# Install counter: one key per install id, expiring 30 days after its last ping.
+# Create it with `npx wrangler kv namespace create INSTALLS` and paste the id here.
+[[kv_namespaces]]
+binding = "INSTALLS"
+id = "<filled at deploy>"
+
 # 3 reports per minute per IP (the worker keys it on CF-Connecting-IP).
 # Needs wrangler 4.36 or later.
 [[ratelimits]]

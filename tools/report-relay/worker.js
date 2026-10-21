@@ -80,15 +80,51 @@ export function discordForm(report) {
 
 const reply = (status, message) => new Response(message, { status });
 
+const ID = /^[0-9a-f]{32}$/;
+const MAX_PING_VERSION = 20;
+const MAX_PING_BODY = 1024;
+const INSTALL_TTL_S = 30 * 24 * 60 * 60; // an install counts for 30 days after its last ping
+
+/** Checks an install ping: { id, version } as JSON plus the version header. */
+export function validatePing(body, headers) {
+  const bad = (error) => ({ ok: false, error });
+  if (!headers.get("X-RL-Trainer-Version")) return bad("missing version header");
+  let data;
+  try {
+    data = JSON.parse(body);
+  } catch {
+    return bad("not JSON");
+  }
+  if (typeof data?.id !== "string" || !ID.test(data.id)) return bad("id must be 32 hex characters");
+  if (typeof data.version !== "string" || data.version.length < 1 || data.version.length > MAX_PING_VERSION) {
+    return bad("version must be 1 to 20 characters");
+  }
+  return { ok: true, ping: { id: data.id, version: data.version } };
+}
+
+async function handlePing(request, env) {
+  if (Number(request.headers.get("Content-Length") ?? 0) > MAX_PING_BODY) return reply(400, "ping is too big");
+  const body = await request.text();
+  if (body.length > MAX_PING_BODY) return reply(400, "ping is too big");
+  const checked = validatePing(body, request.headers);
+  if (!checked.ok) return reply(400, checked.error);
+  await env.INSTALLS.put(checked.ping.id, checked.ping.version, { expirationTtl: INSTALL_TTL_S });
+  return new Response(null, { status: 204 });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname !== "/report" || request.method !== "POST") return reply(404, "not found");
+    const isPing = url.pathname === "/ping";
+    if ((url.pathname !== "/report" && !isPing) || request.method !== "POST") return reply(404, "not found");
     if (Number(request.headers.get("Content-Length") ?? 0) > MAX_TOTAL + 64 * 1024) {
       return reply(400, "report is too big");
     }
-    const { success } = await env.LIMITER.limit({ key: request.headers.get("CF-Connecting-IP") ?? "unknown" });
+    // Pings get their own key, so an app start never uses up a report.
+    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+    const { success } = await env.LIMITER.limit({ key: isPing ? `ping:${ip}` : ip });
     if (!success) return reply(429, "too many reports");
+    if (isPing) return handlePing(request, env);
 
     let form;
     try {

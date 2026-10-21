@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Sidebar } from "./Sidebar";
+
+const onPairPhone = vi.fn();
 
 function renderSidebar(folded = false) {
   return render(
@@ -13,6 +16,7 @@ function renderSidebar(folded = false) {
       toSaveCount={0}
       gameRunning={false}
       phoneConnected={false}
+      onPairPhone={onPairPhone}
     />,
   );
 }
@@ -29,5 +33,11 @@ describe("Sidebar brand", () => {
   it("keeps the logo mark when the sidebar is folded to a rail", () => {
     const { container } = renderSidebar(true);
     expect(container.querySelector(".d-side--rail .d-logo svg.d-mark")).not.toBeNull();
+  });
+
+  it("opens the pairing dialog from the phone line", async () => {
+    renderSidebar();
+    await userEvent.click(screen.getByRole("button", { name: "Pair a phone" }));
+    expect(onPairPhone).toHaveBeenCalledTimes(1);
   });
 });

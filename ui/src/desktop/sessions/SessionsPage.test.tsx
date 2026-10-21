@@ -19,6 +19,13 @@ function renderPage(api: DesktopApi = fakeDesktopApi(), extra: Partial<PageProps
 }
 
 describe("SessionsPage", () => {
+  it("labels a session built from replays", async () => {
+    const cards: SessionCard[] = f.cards.map((c, i) => ({ ...c, imported: i === 0 }));
+    renderPage(fakeDesktopApi({ sessions: vi.fn().mockResolvedValue(cards) }));
+    const list = screen.getByRole("region", { name: "Sessions" });
+    expect(await within(list).findByText("Imported from replays")).toBeInTheDocument();
+  });
+
   it("lists sessions with their summary and review tag, and opens the newest", async () => {
     renderPage();
     const list = screen.getByRole("region", { name: "Sessions" });

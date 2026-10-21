@@ -46,7 +46,9 @@ body {
 .d-badge { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--amber); color: #17120a; font-size: 10px; font-weight: 800; display: grid; place-items: center; }
 .d-nav--foot { margin-top: auto; }
 .d-health { margin: 8px 2px 0; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 11px; color: var(--d-mut); font-weight: 600; }
-.d-health > div { display: flex; align-items: center; gap: 9px; }
+.d-health > div, .d-health__btn { display: flex; align-items: center; gap: 9px; }
+.d-health__btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.d-health__btn:hover .d-label { color: #fff; }
 .d-led { width: 7px; height: 7px; border-radius: 50%; background: #4a4e57; flex: none; }
 .d-led--on { background: var(--green); }
 .d-side--rail { width: 64px; padding: 18px 10px 14px; align-items: center; }
@@ -292,3 +294,6 @@ textarea.d-input { min-height: 64px; resize: vertical; }
 .d-step--done .d-srow__tx b { color: var(--d-mut); }
 .d-form label.d-btn { display: inline-flex; flex-direction: row; }
 .d-form label.d-check { flex-direction: row; align-items: center; gap: 8px; }
+/* The pairing block (QR + link + status) needs more room than a confirm dialog. */
+.d-dialog:has(.d-qr) { width: 620px; }
+.d-dialog .d-srow { padding-left: 0; padding-right: 0; }

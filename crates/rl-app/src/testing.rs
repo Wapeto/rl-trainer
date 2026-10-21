@@ -2,7 +2,6 @@
 
 use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 
 use crate::elevated;
@@ -21,7 +20,7 @@ pub struct FakePlatform {
     game: Arc<Mutex<Option<GameProcess>>>,
     elevation: Mutex<ElevationMode>,
     calls: Mutex<Vec<Vec<String>>>,
-    firewall: AtomicBool,
+    firewall: Mutex<Option<PathBuf>>,
     opened: Mutex<Vec<PathBuf>>,
     documents: Mutex<Option<PathBuf>>,
 }
@@ -43,10 +42,15 @@ impl FakePlatform {
             game: Arc::new(Mutex::new(None)),
             elevation: Mutex::new(ElevationMode::RunInProcess),
             calls: Mutex::new(Vec::new()),
-            firewall: AtomicBool::new(false),
+            firewall: Mutex::new(None),
             opened: Mutex::new(Vec::new()),
             documents: Mutex::new(None),
         })
+    }
+
+    /// Pretends the firewall rule names `program` (an older install, say).
+    pub fn set_firewall_program(&self, program: Option<PathBuf>) {
+        *self.firewall.lock().unwrap_or_else(PoisonError::into_inner) = program;
     }
 
     pub fn set_documents(&self, dir: Option<PathBuf>) {
@@ -114,15 +118,20 @@ impl Platform for FakePlatform {
             ElevationMode::RunInProcess
                 if args.get(1).is_some_and(|a| a == "add-firewall-rule") =>
             {
-                self.firewall.store(true, Ordering::SeqCst);
+                *self.firewall.lock().unwrap_or_else(PoisonError::into_inner) =
+                    args.last().map(PathBuf::from);
                 Ok(elevated::EXIT_OK)
             }
             ElevationMode::RunInProcess => Ok(elevated::run(&args[1..])),
         }
     }
 
-    fn firewall_rule_present(&self) -> bool {
-        self.firewall.load(Ordering::SeqCst)
+    fn firewall_rule_allows(&self, program: &std::path::Path) -> bool {
+        self.firewall
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .as_deref()
+            == Some(program)
     }
 
     /// Loopback, so tests of the LAN path do not listen on every interface.

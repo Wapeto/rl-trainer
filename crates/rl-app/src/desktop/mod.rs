@@ -37,6 +37,8 @@ pub struct About {
     pub version: String,
     /// Where the database, backups and logs live.
     pub data_dir: String,
+    /// A debug build: it never registers itself to start with Windows.
+    pub dev_build: bool,
 }
 
 #[derive(Deserialize)]
@@ -286,7 +288,7 @@ async fn library(app: &App, command: &str, args: &Value) -> Option<Result<Value,
 
 /// The app itself: status, settings, phone, Stats API, backups.
 async fn system(app: &App, command: &str, args: &Value) -> Option<Result<Value, String>> {
-    const NO_ARGS: [&str; 15] = [
+    const NO_ARGS: [&str; 16] = [
         "snapshot",
         "startup_report",
         "about",
@@ -302,6 +304,7 @@ async fn system(app: &App, command: &str, args: &Value) -> Option<Result<Value, 
         "open_data_folder",
         "open_releases",
         "report_info",
+        "import_past_games",
     ];
     if NO_ARGS.contains(&command) {
         // Check the arguments before running anything.
@@ -353,6 +356,7 @@ async fn system_no_args(app: &App, command: &str) -> Option<Result<Value, String
         "about" => reply(About {
             version: env!("CARGO_PKG_VERSION").to_owned(),
             data_dir: app.paths().root.display().to_string(),
+            dev_build: cfg!(debug_assertions),
         }),
         "settings" => app.settings().map_err(text).and_then(reply),
         "profiles" => app.profiles().map_err(text).and_then(reply),
@@ -364,6 +368,11 @@ async fn system_no_args(app: &App, command: &str) -> Option<Result<Value, String
         "recheck_stats_api" => reply(app.recheck_stats_api().await),
         "backups" => app.list_backups().map_err(text).and_then(reply),
         "report_info" => reply(app.report_info()),
+        "import_past_games" => app
+            .import_past_games(crate::replays::backfill::PAST_GAMES_LIMIT)
+            .await
+            .map_err(text)
+            .and_then(reply),
         "open_data_folder" => app.open_data_folder().map_err(text).and_then(reply),
         "open_releases" => app.open_releases().map_err(text).and_then(reply),
         _ => return None,

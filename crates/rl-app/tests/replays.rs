@@ -78,6 +78,17 @@ async fn a_saved_replay_is_imported_and_counted_once() {
     let detail = app.session_detail(1).unwrap().unwrap();
     let m = detail.activities[0].match_summary.as_ref().unwrap();
     assert!(m.replay.as_ref().is_some_and(|r| r.touches > 0));
+    // The live record said 3-1; the replay's header has the final score.
+    let conn = rl_core::store::open_db(&db).unwrap();
+    let (src, mine, theirs): (String, i64, i64) = conn
+        .query_row(
+            "SELECT result_source, team_score, opponent_score FROM match_record WHERE id = 1",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+        )
+        .unwrap();
+    assert_eq!((src.as_str(), mine + theirs), ("replay", 3));
+    drop(conn);
     let players = players(&db);
     assert_eq!(players.len(), 4, "every player of the 2v2");
     assert_eq!(players.iter().filter(|p| p.is_me).count(), 1);

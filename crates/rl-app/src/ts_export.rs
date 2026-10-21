@@ -651,6 +651,7 @@ mod tests {
             casual_matches: 0,
             freeplay_activities: freeplay,
             needs_review,
+            imported: false,
         };
         vec![
             card(12, D0, 98, 2, 3, 1, false),
@@ -765,6 +766,7 @@ mod tests {
         let about = About {
             version: "0.1.0".into(),
             data_dir: "C:\\Users\\me\\AppData\\Local\\rl-trainer".into(),
+            dev_build: false,
         };
         let v = |x: serde_json::Result<serde_json::Value>| x.unwrap();
         vec![

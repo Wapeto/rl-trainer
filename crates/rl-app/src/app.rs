@@ -125,6 +125,7 @@ fn undo_patch(patch: &SettingsPatch, before: &Settings) -> SettingsPatch {
             .as_ref()
             .map(|_| before.me_hint.clone().unwrap_or_default()),
         setup_dismissed: patch.setup_dismissed.map(|_| before.setup_dismissed),
+        usage_ping: patch.usage_ping.map(|_| before.usage_ping),
     }
 }
 
@@ -295,6 +296,9 @@ impl App {
             }
         }
         app.spawn_replay_poller(config.replay_poll_every);
+        // The game may already be set up: show the Stats API state before it starts.
+        app.recheck_stats_api().await;
+        app.spawn_usage_ping();
         Ok(app)
     }
 
@@ -712,10 +716,11 @@ impl App {
 
     async fn ensure_firewall(&self, port: u16) -> Result<(), AppError> {
         let recorded = self.settings()?.firewall_port == Some(port);
-        if recorded && self.inner.platform.firewall_rule_present() {
+        let exe = self.inner.platform.current_exe();
+        if recorded && self.inner.platform.firewall_rule_allows(&exe) {
             return Ok(());
         }
-        let args = elevated::firewall_args(port, &self.inner.platform.current_exe());
+        let args = elevated::firewall_args(port, &exe);
         let platform = self.inner.platform.clone();
         let code = tokio::task::spawn_blocking(move || platform.run_elevated(&args))
             .await

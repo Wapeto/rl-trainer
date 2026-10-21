@@ -120,8 +120,23 @@ pub fn netsh_show_args() -> Vec<String> {
     ["advfirewall", "firewall", "show", "rule"]
         .into_iter()
         .map(String::from)
-        .chain([format!("name={FIREWALL_RULE}")])
+        .chain([format!("name={FIREWALL_RULE}"), "verbose".into()])
         .collect()
+}
+
+/// Whether `netsh ... show rule verbose` output names `program` (case-insensitive).
+pub fn rule_allows_program(netsh_output: &str, program: &Path) -> bool {
+    let named: Vec<&str> = netsh_output
+        .lines()
+        .filter_map(|l| l.trim().strip_prefix("Program:"))
+        .map(str::trim)
+        .collect();
+    // shortcut: English "Program:" label only; with no such line (localized Windows) the rule
+    // counts as present to avoid a UAC prompt on every start. Upgrade if that bites.
+    named.is_empty()
+        || named
+            .iter()
+            .any(|p| p.eq_ignore_ascii_case(&program.to_string_lossy()))
 }
 
 /// The program the firewall rule may name: this executable, and only when `program` resolves
@@ -278,6 +293,23 @@ mod tests {
             EXIT_REFUSED,
             "a rule may only target this program"
         );
+    }
+
+    #[test]
+    fn a_rule_for_another_program_does_not_allow_this_one() {
+        let out = "Rule Name:   RL-Trainer-Phone\r\n  Program:     C:\\Old\\Rl-Trainer.exe\r\n  Action:  Allow\r\n";
+        assert!(rule_allows_program(
+            out,
+            Path::new("c:\\old\\rl-trainer.exe")
+        ));
+        assert!(!rule_allows_program(
+            out,
+            Path::new("C:\\New\\rl-trainer.exe")
+        ));
+        assert!(rule_allows_program(
+            "Rule Name: x\r\n",
+            Path::new("C:\\a.exe")
+        ));
     }
 
     #[test]

@@ -107,7 +107,11 @@ export type SessionCard = { id: number, started_at: number, ended_at: number | n
 /**
  * Distinct packs trained; training without a pack counts as one.
  */
-packs: number, ranked_matches: number, casual_matches: number, freeplay_activities: number, needs_review: boolean, };
+packs: number, ranked_matches: number, casual_matches: number, freeplay_activities: number, needs_review: boolean, 
+/**
+ * Built from replay files, not recorded live.
+ */
+imported: boolean, };
 
 export type PackRef = { id: number, name: string, code: string, target_rate: number, };
 
@@ -303,7 +307,11 @@ me_hint: string | null,
 /**
  * The "Get started" card on Sessions was dismissed.
  */
-setup_dismissed: boolean, };
+setup_dismissed: boolean, 
+/**
+ * Sends a random install id and the app version to the relay once a day.
+ */
+usage_ping: boolean, };
 
 export type BackupKind = "daily" | "pre_migration" | "pre_restore" | "pre_edit";
 
@@ -319,7 +327,11 @@ export type About = { version: string,
 /**
  * Where the database, backups and logs live.
  */
-data_dir: string, };
+data_dir: string, 
+/**
+ * A debug build: it never registers itself to start with Windows.
+ */
+dev_build: boolean, };
 
 export type ReportInfo = { 
 /**

@@ -4,6 +4,7 @@
 use std::panic::AssertUnwindSafe;
 
 use rl_core::ingest::now_ms;
+use rl_core::store::past_games;
 use rl_core::store::replays::{self, ReplayFileRecord, ReplayFileStatus};
 use rl_core::store::{profile_primary_id, EditError};
 
@@ -14,7 +15,7 @@ use crate::app::{App, AppError};
 enum Outcome {
     Unmatched(Option<String>),
     NotMine(String),
-    Stats(String, i64, Extracted),
+    Stats(String, i64, Box<Extracted>),
     Failed(Option<String>, String),
 }
 
@@ -61,7 +62,7 @@ impl App {
         .await
         .map_err(|e| AppError::Join(e.to_string()))?;
         Ok(match parsed {
-            Ok(Ok(Some(found))) => Outcome::Stats(guid, match_id, found),
+            Ok(Ok(Some(found))) => Outcome::Stats(guid, match_id, Box::new(found)),
             Ok(Ok(None)) => Outcome::NotMine(guid),
             Ok(Err(err)) => Outcome::Failed(Some(guid), err.to_string()),
             Err(_) => Outcome::Failed(Some(guid), "the replay parser crashed on this file".into()),
@@ -94,6 +95,9 @@ impl App {
                     if let Some((id, x)) = &stats {
                         replays::save_stats(&tx, *id, &x.mine, PARSER_VERSION, now)?;
                         replays::save_players(&tx, *id, &x.players)?;
+                        if let Some(outcome) = x.outcome {
+                            past_games::apply_outcome(&tx, *id, outcome)?;
+                        }
                     }
                     tx.commit()?;
                     Ok(())

@@ -484,8 +484,8 @@ pub(crate) const HISTORY_PLACE: &str = "(SELECT COUNT(*) FROM match_record hm
 /// SQL keeping the start of every match in the blocks `WHERE` picks, before they are deleted.
 pub(crate) fn remember_deleted_matches(where_blocks: &str) -> String {
     format!(
-        "INSERT INTO deleted_match (started_at)
-         SELECT b.started_at FROM match_record m JOIN block b ON b.id = m.block_id
+        "INSERT INTO deleted_match (started_at, match_guid)
+         SELECT b.started_at, m.match_guid FROM match_record m JOIN block b ON b.id = m.block_id
          WHERE {where_blocks}"
     )
 }

@@ -1,7 +1,7 @@
 //! What the app needs from the operating system, behind a trait so tests can fake it.
 
 use std::net::IpAddr;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use serde::Serialize;
 use thiserror::Error;
@@ -42,7 +42,8 @@ pub trait Platform: Send + Sync + 'static {
     fn current_exe(&self) -> PathBuf;
     /// Runs this executable elevated with `args` (starting with `--elevated`) and waits.
     fn run_elevated(&self, args: &[String]) -> Result<i32, PlatformError>;
-    fn firewall_rule_present(&self) -> bool;
+    /// Whether the phone-page rule exists and allows `program`.
+    fn firewall_rule_allows(&self, program: &Path) -> bool;
     fn epic_manifests_dir(&self) -> Option<PathBuf>;
     fn steam_root(&self) -> Option<PathBuf>;
     fn process_probe(&self) -> Box<dyn ProcessProbe>;
@@ -91,7 +92,7 @@ impl Platform for HeadlessPlatform {
             "administrator actions are not available in serve mode".into(),
         ))
     }
-    fn firewall_rule_present(&self) -> bool {
+    fn firewall_rule_allows(&self, _program: &Path) -> bool {
         true // left to Windows' own prompt in serve mode
     }
     fn epic_manifests_dir(&self) -> Option<PathBuf> {
@@ -114,7 +115,7 @@ mod windows_impl {
     use std::path::{Path, PathBuf};
 
     use super::{Platform, PlatformError};
-    use crate::elevated::netsh_show_args;
+    use crate::elevated::{netsh_show_args, rule_allows_program};
     use crate::game_watch::probe::SysinfoProbe;
     use crate::game_watch::ProcessProbe;
 
@@ -193,12 +194,18 @@ mod windows_impl {
             shell_execute_runas(&self.current_exe(), args)
         }
 
-        fn firewall_rule_present(&self) -> bool {
+        fn firewall_rule_allows(&self, program: &Path) -> bool {
+            // The rule is written with the resolved path (`firewall_target`); compare the same.
+            let program =
+                crate::elevated::firewall_target(program).unwrap_or(program.to_path_buf());
             std::process::Command::new("netsh")
                 .args(netsh_show_args())
                 .creation_flags(CREATE_NO_WINDOW)
                 .output()
-                .is_ok_and(|out| out.status.success())
+                .is_ok_and(|out| {
+                    out.status.success()
+                        && rule_allows_program(&String::from_utf8_lossy(&out.stdout), &program)
+                })
         }
 
         fn epic_manifests_dir(&self) -> Option<PathBuf> {

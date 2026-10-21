@@ -34,7 +34,6 @@ The **Get started** card on the Sessions page walks you through it:
    (or Epic account ID) in **Settings → Tracking**. Steam accounts work too.
 3. **Phone (optional).** Turn on the phone page in Settings, allow the firewall prompt, and scan
    the QR code with a phone on the same Wi-Fi. Your network must be set to *Private* in Windows.
-   Another firewall (for example Portmaster) may block RL Trainer even after Windows allows it.
 
 ## Your data
 

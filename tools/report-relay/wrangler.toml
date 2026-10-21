@@ -6,7 +6,7 @@ compatibility_date = "2026-10-01"
 # Create it with `npx wrangler kv namespace create INSTALLS` and paste the id here.
 [[kv_namespaces]]
 binding = "INSTALLS"
-id = "<filled at deploy>"
+id = "835ac066be4b40f5b081cd14e1e139a8"
 
 # 3 reports per minute per IP (the worker keys it on CF-Connecting-IP).
 # Needs wrangler 4.36 or later.

@@ -120,7 +120,9 @@ export default {
     if (Number(request.headers.get("Content-Length") ?? 0) > MAX_TOTAL + 64 * 1024) {
       return reply(400, "report is too big");
     }
-    const { success } = await env.LIMITER.limit({ key: request.headers.get("CF-Connecting-IP") ?? "unknown" });
+    // Pings get their own key, so an app start never uses up a report.
+    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+    const { success } = await env.LIMITER.limit({ key: isPing ? `ping:${ip}` : ip });
     if (!success) return reply(429, "too many reports");
     if (isPing) return handlePing(request, env);
 

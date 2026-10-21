@@ -164,10 +164,12 @@ interface ReplaysProps {
   settings: Settings;
   status: ReplayStatus | undefined;
   save: SaveSetting;
+  /** Tells the other pages (Sessions) that imported games were added. */
+  onChanged?: () => void;
 }
 
 /** The replay folder being watched and what was found in it (spec §4.1, §9). */
-export function ReplaysSection({ api, notify, refresh, settings, status, save }: ReplaysProps) {
+export function ReplaysSection({ api, notify, refresh, settings, status, save, onChanged }: ReplaysProps) {
   const [importing, setImporting] = useState(false);
   const c = status?.counts;
   const folders = status?.folders ?? [];
@@ -181,6 +183,7 @@ export function ReplaysSection({ api, notify, refresh, settings, status, save }:
     if (ok) {
       notify(n === 0 ? "No new games found" : `${n} ${n === 1 ? "game" : "games"} imported`, "ok");
       refresh();
+      if (n > 0) onChanged?.();
     }
   }
   return (

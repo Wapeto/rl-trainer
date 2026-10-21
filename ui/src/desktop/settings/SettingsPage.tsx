@@ -49,7 +49,7 @@ export function SettingsPage({ api, snapshot, now, notify, reload, onChanged, on
               save={save}
             />
             <GameSection api={api} notify={notify} settings={s} status={snapshot?.stats_api} live={snapshot ?? undefined} save={save} />
-            <ReplaysSection api={api} notify={notify} settings={s} status={replays.data} save={save} refresh={refresh} />
+            <ReplaysSection api={api} notify={notify} settings={s} status={replays.data} save={save} refresh={refresh} onChanged={onChanged} />
             <TrackingSection api={api} notify={notify} settings={s} profiles={profiles.data ?? []} refresh={refresh} save={save} />
             <AppSection
               api={api}

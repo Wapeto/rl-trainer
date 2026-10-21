@@ -61,6 +61,19 @@ fn is_deleted(conn: &Connection, guid: &str) -> rusqlite::Result<bool> {
     )
 }
 
+/// A match deleted before 0.3 kept only its start time. Its live block starts close to the
+/// replay's estimated start (save time minus the game length), so match on a window.
+const DELETED_START_SLACK_MS: i64 = 120_000;
+
+fn deleted_without_guid(conn: &Connection, game: &PastGame) -> rusqlite::Result<bool> {
+    conn.query_row(
+        "SELECT EXISTS (SELECT 1 FROM deleted_match
+                        WHERE match_guid IS NULL AND started_at BETWEEN ?1 AND ?2)",
+        params![game.started_at - DELETED_START_SLACK_MS, game.ended_at],
+        |r| r.get(0),
+    )
+}
+
 /// Whether the replay of this game needs no more reading: the user deleted the match, or its
 /// replay stats are already saved. (A live match without stats is the folder poller's job.)
 pub fn game_settled(conn: &Connection, guid: &str) -> rusqlite::Result<bool> {
@@ -105,7 +118,7 @@ pub fn insert_past_game(
     if super::replays::match_id_by_guid(conn, &game.match_guid)?.is_some() {
         return Ok(None);
     }
-    if is_deleted(conn, &game.match_guid)? {
+    if is_deleted(conn, &game.match_guid)? || deleted_without_guid(conn, game)? {
         return Ok(None);
     }
     let existing: Option<i64> = conn
@@ -312,6 +325,25 @@ mod tests {
             .query_row("SELECT COUNT(*) FROM match_record", [], |r| r.get(0))
             .unwrap();
         assert_eq!(matches, 1);
+    }
+
+    #[test]
+    fn a_match_deleted_before_guids_were_kept_stays_gone() {
+        let conn = open_in_memory().unwrap();
+        let start = 10 * DAY;
+        // Deleted under 0.2: only the live block's start is known, a little after the estimate.
+        conn.execute(
+            "INSERT INTO deleted_match (started_at, match_guid) VALUES (?1, NULL)",
+            params![start + 30_000],
+        )
+        .unwrap();
+        let gone = insert_past_game(&conn, &game("OLD", start), 9 * DAY, 11 * DAY).unwrap();
+        assert_eq!(gone, None);
+        let other = insert_past_game(&conn, &game("NEW", start + 3_600_000), 9 * DAY, 11 * DAY);
+        assert!(
+            other.unwrap().is_some(),
+            "a game an hour later is not the deleted one"
+        );
     }
 
     #[test]

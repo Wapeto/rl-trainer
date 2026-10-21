@@ -145,6 +145,17 @@ async fn a_game_already_in_the_log_is_not_added_again() {
     app.shutdown().await;
 }
 
+/// Debug-build replay parsing is slow when the tests run in parallel: allow 30 s.
+async fn wait_for_matches(db: &std::path::Path, n: i64) {
+    for _ in 0..300 {
+        if count(db, "SELECT COUNT(*) FROM match_record") == n {
+            return;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    assert_eq!(count(db, "SELECT COUNT(*) FROM match_record"), n);
+}
+
 #[tokio::test]
 async fn the_first_start_imports_once() {
     let Some(bytes) = fixture() else { return };
@@ -153,13 +164,7 @@ async fn the_first_start_imports_once() {
     let app = App::start(s.config.clone(), FakePlatform::new())
         .await
         .unwrap();
-    for _ in 0..100 {
-        if count(&db, "SELECT COUNT(*) FROM match_record") == 1 {
-            break;
-        }
-        tokio::time::sleep(Duration::from_millis(100)).await;
-    }
-    assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 1);
+    wait_for_matches(&db, 1).await;
     app.shutdown().await;
     // The user deletes the game; a later start must not bring it back.
     let conn = rl_core::store::open_db(&db).unwrap();
@@ -169,6 +174,14 @@ async fn the_first_start_imports_once() {
     )
     .unwrap();
     drop(conn);
+    // What keeps a later start from importing again: the flag is set.
+    assert_eq!(
+        count(
+            &db,
+            "SELECT COUNT(*) FROM setting WHERE key = 'backfill_done' AND value = 'true'"
+        ),
+        1
+    );
     let app = App::start(s.config.clone(), FakePlatform::new())
         .await
         .unwrap();
@@ -200,13 +213,7 @@ async fn the_first_import_waits_for_the_profile() {
         [&me],
     )
     .unwrap();
-    for _ in 0..100 {
-        if count(&db, "SELECT COUNT(*) FROM match_record") == 1 {
-            break;
-        }
-        tokio::time::sleep(Duration::from_millis(100)).await;
-    }
-    assert_eq!(count(&db, "SELECT COUNT(*) FROM match_record"), 1);
+    wait_for_matches(&db, 1).await;
     app.shutdown().await;
 }
 

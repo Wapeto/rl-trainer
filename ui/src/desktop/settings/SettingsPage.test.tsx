@@ -12,8 +12,9 @@ import { backupLabel } from "./sections";
 
 function renderPage(api: DesktopApi = fakeDesktopApi(), snapshot: AppSnapshot = fixtures.trainingBelow) {
   const notify = vi.fn();
-  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={notify} reload="r" onChanged={vi.fn()} />);
-  return { api, notify };
+  const onChanged = vi.fn();
+  render(<SettingsPage api={api} snapshot={snapshot} now={DESKTOP_NOW} notify={notify} reload="r" onChanged={onChanged} />);
+  return { api, notify, onChanged };
 }
 
 describe("SettingsPage", () => {
@@ -199,11 +200,12 @@ describe("SettingsPage", () => {
   });
 
   it("imports past games and says how many came in", async () => {
-    const { api, notify } = renderPage(fakeDesktopApi({ importPastGames: vi.fn().mockResolvedValue(3) }));
+    const { api, notify, onChanged } = renderPage(fakeDesktopApi({ importPastGames: vi.fn().mockResolvedValue(3) }));
     const section = await screen.findByRole("region", { name: "Replays" });
     await userEvent.click(within(section).getByRole("button", { name: "Import past games" }));
     expect(api.importPastGames).toHaveBeenCalledTimes(1);
     expect(notify).toHaveBeenCalledWith("3 games imported", "ok");
+    expect(onChanged).toHaveBeenCalled(); // Sessions shows the new days without a reload
   });
 
   it("warns when the latest replays could not be read", async () => {

@@ -86,6 +86,8 @@ impl App {
     async fn import_past_game(&self, file: FileInfo, me: &PlayerKey) -> Result<bool, AppError> {
         let read = self.read_past_game(&file, me).await?;
         let (guid, found) = match read {
+            // shortcut: an unsettled file (no GUID, or a live match still waiting for its stats)
+            // is read again by every import; record a status for it if folders get large.
             Read::Skip => return Ok(false),
             Read::Known(g) => {
                 return self

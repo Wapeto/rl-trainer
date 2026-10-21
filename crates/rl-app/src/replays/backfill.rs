@@ -147,7 +147,9 @@ impl App {
         let path = file.path.clone();
         let header = tokio::task::spawn_blocking(move || {
             let bytes = std::fs::read(&path).map_err(|e| e.to_string())?;
-            let guid = extract::read_guid(&bytes).map_err(|e| e.to_string())?;
+            // shortcut: an older replay is keyed by its own Id, so the same game saved twice
+            // imports twice; dedupe on date and score if that shows up.
+            let guid = extract::past_game_key(&bytes).map_err(|e| e.to_string())?;
             Ok::<_, String>((bytes, guid))
         })
         .await

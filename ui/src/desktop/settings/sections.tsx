@@ -210,7 +210,7 @@ export function ReplaysSection({ api, notify, refresh, settings, status, save, o
         </Row>
         <Row title="Past games" hint="Adds your newest replays that were never recorded live, as sessions of their own.">
           <button type="button" className="d-btn" disabled={importing} onClick={importPast}>
-            Import past games
+            {importing ? "Importing…" : "Import past games"}
           </button>
         </Row>
         {c && (

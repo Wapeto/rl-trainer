@@ -64,16 +64,38 @@ impl PlayerKey {
 }
 
 pub fn read_guid(bytes: &[u8]) -> Result<Option<String>, ExtractError> {
+    Ok(read_header_ids(bytes)?.0)
+}
+
+/// What "Import past games" keys a game by: its `MatchGUID`, or for older replays without one
+/// (most replays before late 2026, FINDINGS) the replay's own `Id`, prefixed so it can never
+/// equal a live match's GUID.
+pub fn past_game_key(bytes: &[u8]) -> Result<Option<String>, ExtractError> {
+    let (guid, id) = read_header_ids(bytes)?;
+    Ok(pick_key(guid, id))
+}
+
+fn pick_key(guid: Option<String>, id: Option<String>) -> Option<String> {
+    guid.or_else(|| id.map(|id| format!("{REPLAY_ID_KEY}{id}")))
+}
+
+pub const REPLAY_ID_KEY: &str = "replay:";
+
+fn read_header_ids(bytes: &[u8]) -> Result<(Option<String>, Option<String>), ExtractError> {
     let replay = boxcars::ParserBuilder::new(bytes)
         .never_parse_network_data()
         .parse()
         .map_err(|e| ExtractError::Parse(e.to_string()))?;
-    Ok(replay
-        .properties
-        .iter()
-        .find(|(k, _)| k == "MatchGUID")
-        .and_then(|(_, v)| v.as_string())
-        .map(str::to_owned))
+    let prop = |name: &str| {
+        replay
+            .properties
+            .iter()
+            .find(|(k, _)| k == name)
+            .and_then(|(_, v)| v.as_string())
+            .filter(|s| !s.is_empty())
+            .map(str::to_owned)
+    };
+    Ok((prop("MatchGUID"), prop("Id")))
 }
 
 /// The replay's human (not bot) players, in team order. Tests pick their "me" from it, so no
@@ -443,6 +465,14 @@ mod tests {
 
     /// An online replay. It is not committed (it holds players' names and account ids), so the
     /// tests that need it skip, with a note, when it is missing.
+    #[test]
+    fn a_past_game_is_keyed_by_its_guid_else_by_its_replay_id() {
+        let s = |v: &str| Some(v.to_owned());
+        assert_eq!(pick_key(s("ABC"), s("F00")), s("ABC"));
+        assert_eq!(pick_key(None, s("F00")), s("replay:F00"));
+        assert_eq!(pick_key(None, None), None);
+    }
+
     fn fixture() -> Option<Vec<u8>> {
         let path = concat!(
             env!("CARGO_MANIFEST_DIR"),

@@ -143,3 +143,24 @@ async fn startup_imports_the_dev_db_and_recovers_its_open_session() {
     assert!(app.settings().unwrap().dev_db_imported_at.is_some());
     app.shutdown().await;
 }
+
+#[tokio::test]
+async fn the_stats_api_is_checked_at_start_without_the_game_running() {
+    let dir = tempfile::tempdir().unwrap();
+    let exe = install(dir.path(), &ini_text(10, 49_123));
+    let root = exe.ancestors().nth(3).unwrap().to_path_buf();
+    let platform = FakePlatform::new();
+    let app = start(&dir, platform.clone(), None).await;
+    let patch = rl_app::settings::SettingsPatch {
+        install_dir: Some(Some(root)),
+        ..Default::default()
+    };
+    app.update_settings(&patch).await.unwrap();
+    app.shutdown().await;
+    let app = start(&dir, platform, None).await;
+    wait_for(&app, "the Stats API status", |s| {
+        matches!(s.stats_api, StatsApiStatus::Ok { .. })
+    })
+    .await;
+    app.shutdown().await;
+}

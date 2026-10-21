@@ -196,13 +196,16 @@ export function GameSection({ api, notify, settings, status, live, save }: GameP
 }
 
 interface ReplaysProps {
+  api: DesktopApi;
+  notify: Notify;
+  refresh: () => void;
   settings: Settings;
   status: ReplayStatus | undefined;
   save: SaveSetting;
 }
 
 /** The replay folder being watched and what was found in it (spec §4.1, §9). */
-export function ReplaysSection({ settings, status, save }: ReplaysProps) {
+export function ReplaysSection({ api, notify, refresh, settings, status, save }: ReplaysProps) {
   const c = status?.counts;
   const folders = status?.folders ?? [];
   return (
@@ -226,6 +229,24 @@ export function ReplaysSection({ settings, status, save }: ReplaysProps) {
               save({ replay_dir: raw === "" ? null : raw }, raw === "" ? "The game's folder will be used" : "Folder saved")
             }
           />
+        </Row>
+        <Row title="Past games" hint="Adds your newest replays that were never recorded live, as sessions of their own.">
+          <button
+            type="button"
+            className="d-btn"
+            onClick={async () => {
+              let n = 0;
+              const ok = await act(notify, async () => {
+                n = await api.importPastGames();
+              });
+              if (ok) {
+                notify(n === 0 ? "No new games found" : `${n} ${n === 1 ? "game" : "games"} imported`, "ok");
+                refresh();
+              }
+            }}
+          >
+            Import past games
+          </button>
         </Row>
         {c && (
           <Row title="Imported" hint={c.last_error ?? undefined}>

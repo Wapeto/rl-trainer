@@ -298,9 +298,18 @@ mod tests {
     #[test]
     fn a_rule_for_another_program_does_not_allow_this_one() {
         let out = "Rule Name:   RL-Trainer-Phone\r\n  Program:     C:\\Old\\Rl-Trainer.exe\r\n  Action:  Allow\r\n";
-        assert!(rule_allows_program(out, Path::new("c:\\old\\rl-trainer.exe")));
-        assert!(!rule_allows_program(out, Path::new("C:\\New\\rl-trainer.exe")));
-        assert!(rule_allows_program("Rule Name: x\r\n", Path::new("C:\\a.exe")));
+        assert!(rule_allows_program(
+            out,
+            Path::new("c:\\old\\rl-trainer.exe")
+        ));
+        assert!(!rule_allows_program(
+            out,
+            Path::new("C:\\New\\rl-trainer.exe")
+        ));
+        assert!(rule_allows_program(
+            "Rule Name: x\r\n",
+            Path::new("C:\\a.exe")
+        ));
     }
 
     #[test]

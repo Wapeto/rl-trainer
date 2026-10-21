@@ -31,6 +31,7 @@ const FIREWALL_PORT: &str = "firewall_port";
 const ME_HINT: &str = "me_hint";
 const SETUP_DISMISSED: &str = "setup_dismissed";
 const DEV_DB_IMPORTED_AT: &str = "dev_db_imported_at";
+const BACKFILL_DONE: &str = "backfill_done";
 
 #[derive(Debug, Error)]
 pub enum SettingsError {
@@ -240,6 +241,15 @@ pub fn set_phone_enabled(conn: &Connection, enabled: bool) -> Result<(), Setting
 
 pub fn set_firewall_port(conn: &Connection, port: u16) -> Result<(), SettingsError> {
     Ok(put(conn, FIREWALL_PORT, Some(port.to_string()))?)
+}
+
+/// Whether the first-start import of past games has run.
+pub fn backfill_done(conn: &Connection) -> Result<bool, SettingsError> {
+    Ok(parsed(conn, BACKFILL_DONE, false)?)
+}
+
+pub fn set_backfill_done(conn: &Connection) -> Result<(), SettingsError> {
+    Ok(put(conn, BACKFILL_DONE, Some("true".to_owned()))?)
 }
 
 pub fn set_dev_db_imported_at(conn: &Connection, at_ms: i64) -> Result<(), SettingsError> {

@@ -189,6 +189,13 @@ describe("SettingsPage", () => {
     expect(api.updateSettings).toHaveBeenCalledWith({ replay_dir: "D:\\Replays" });
   });
 
+  it("imports past games and says how many came in", async () => {
+    const { api } = renderPage();
+    const section = await screen.findByRole("region", { name: "Replays" });
+    await userEvent.click(within(section).getByRole("button", { name: "Import past games" }));
+    expect(api.importPastGames).toHaveBeenCalledTimes(1);
+  });
+
   it("warns when the latest replays could not be read", async () => {
     const status = { ...f.replayStatus, counts: { ...f.replayStatus.counts, format_warning: true } };
     renderPage(fakeDesktopApi({ replayStatus: vi.fn().mockResolvedValue(status) }));

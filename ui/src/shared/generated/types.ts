@@ -107,7 +107,11 @@ export type SessionCard = { id: number, started_at: number, ended_at: number | n
 /**
  * Distinct packs trained; training without a pack counts as one.
  */
-packs: number, ranked_matches: number, casual_matches: number, freeplay_activities: number, needs_review: boolean, };
+packs: number, ranked_matches: number, casual_matches: number, freeplay_activities: number, needs_review: boolean, 
+/**
+ * Built from replay files, not recorded live.
+ */
+imported: boolean, };
 
 export type PackRef = { id: number, name: string, code: string, target_rate: number, };
 

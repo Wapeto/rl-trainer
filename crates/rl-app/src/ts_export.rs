@@ -651,6 +651,7 @@ mod tests {
             casual_matches: 0,
             freeplay_activities: freeplay,
             needs_review,
+            imported: false,
         };
         vec![
             card(12, D0, 98, 2, 3, 1, false),

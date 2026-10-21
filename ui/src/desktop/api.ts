@@ -69,6 +69,8 @@ export interface DesktopApi {
   sessionReview(id: number): Promise<SessionReview | null>;
   replaysToSave(): Promise<ReplayToSave[]>;
   replayStatus(): Promise<ReplayStatus>;
+  /** Adds the newest replays of games that were never recorded; returns how many came in. */
+  importPastGames(): Promise<number>;
   /** A match's replay page: every player, my usual in this mode, and what stood out. */
   matchReplay(matchId: number): Promise<MatchReplay>;
   reviewCount(): Promise<number>;
@@ -210,6 +212,7 @@ export function createDesktopApi(t: Transport): DesktopApi {
     sessionReview: (id) => call("session_review", { id }),
     replaysToSave: () => call("replays_to_save"),
     replayStatus: () => call("replay_status"),
+    importPastGames: () => call("import_past_games"),
     matchReplay: (matchId) => call("match_replay", { id: matchId }),
     reviewCount: () => call("review_count"),
     session: (id) => call("session", { id }),

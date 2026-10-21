@@ -46,8 +46,9 @@ pub fn apply_outcome(
 
 /// Replay files that were looked at for good: imported, not mine, or unreadable.
 pub fn settled_files(conn: &Connection) -> rusqlite::Result<HashSet<String>> {
-    let mut stmt = conn
-        .prepare("SELECT path FROM replay_file WHERE status IN ('imported', 'not_mine', 'error')")?;
+    let mut stmt = conn.prepare(
+        "SELECT path FROM replay_file WHERE status IN ('imported', 'not_mine', 'error')",
+    )?;
     let rows = stmt.query_map([], |r| r.get(0))?;
     rows.collect()
 }

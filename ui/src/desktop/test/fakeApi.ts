@@ -14,6 +14,7 @@ export function fakeDesktopApi(overrides: Partial<DesktopApi> = {}): DesktopApi 
     sessionReview: vi.fn().mockResolvedValue(f.review),
     replaysToSave: vi.fn().mockResolvedValue(f.toSave),
     replayStatus: vi.fn().mockResolvedValue(f.replayStatus),
+    importPastGames: vi.fn().mockResolvedValue(3),
     matchReplay: vi.fn().mockResolvedValue(f.matchReplay),
     reviewCount: vi.fn().mockResolvedValue(1),
     session: vi.fn().mockResolvedValue(f.detail),

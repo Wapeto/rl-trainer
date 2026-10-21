@@ -81,7 +81,10 @@ export function SessionList(props: SessionListProps) {
                 <span className="d-lane__t">{span(card.started_at, card.ended_at)}</span>
                 <span className="d-lane__r">{length ?? <span className="d-now">NOW</span>}</span>
                 <span className="d-lane__sub">{cardSummary(card)}</span>
-                <span className="d-lane__r">{card.needs_review && <span className="d-tag">Review</span>}</span>
+                <span className="d-lane__r">
+                  {card.imported && <span className="d-tag">Imported from replays</span>}
+                  {card.needs_review && <span className="d-tag">Review</span>}
+                </span>
               </button>
             );
           })}
